@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Test App</title>
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+  <style>
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      background: #111;
+    }
+
+    button {
+      width: 150px;
+      height: 150px;
+      border-radius: 50%;
+      border: none;
+      font-size: 20px;
+      background: green;
+      color: white;
+      transition: 0.2s;
+    }
+  </style>
+</head>
+<body>
+
+<button id="btn">Привет</button>
+
+<script>
+  let btn = document.getElementById("btn");
+  let size = 150;
+  let clicks = 0;
+
+  btn.onclick = () => {
+    clicks++;
+
+    size += 10;
+    btn.style.width = size + "px";
+    btn.style.height = size + "px";
+
+    if (clicks > 3) btn.style.background = "orange";
+    if (clicks > 6) btn.style.background = "red";
+
+    if (clicks > 9) {
+      btn.innerText = "💥";
+      btn.style.background = "black";
+      btn.style.color = "red";
+      btn.style.transform = "scale(2)";
+      setTimeout(() => {
+        btn.remove();
+      }, 500);
+    }
+  }
+</script>
+
+</body>
+</html>

@@ -95,54 +95,61 @@
 
     .arena {
       position: relative;
-      height: 320px;
+      height: 340px;
       display: flex;
       align-items: center;
       justify-content: center;
       overflow: visible;
     }
 
-    /* СТАБИЛЬНАЯ ЗОНА НАЖАТИЯ */
     .tap-zone {
       position: relative;
-      width: 220px;
-      height: 220px;
+      width: 240px;
+      height: 240px;
       display: flex;
       align-items: center;
       justify-content: center;
       touch-action: manipulation;
     }
 
-    /* ВИЗУАЛЬНАЯ КНОПКА */
-    .hello-btn {
+    .emoji-btn {
       position: relative;
-      width: 150px;
-      height: 150px;
+      width: 170px;
+      height: 170px;
       border: none;
       border-radius: 50%;
       cursor: pointer;
       touch-action: manipulation;
       outline: none;
-      color: #fff;
-      font-size: 24px;
-      font-weight: 800;
-      letter-spacing: -0.02em;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transform: scale(1);
+      transition:
+        transform 0.14s ease,
+        background 0.25s ease,
+        box-shadow 0.25s ease,
+        opacity 0.25s ease,
+        filter 0.25s ease;
+      will-change: transform;
       background:
         radial-gradient(circle at 30% 30%, #53ff9f 0%, #00b85c 65%, #00793c 100%);
       box-shadow:
         0 0 30px rgba(0,255,140,0.22),
         0 18px 36px rgba(0,0,0,0.35),
         inset 0 8px 18px rgba(255,255,255,0.22);
-      transform: scale(1);
-      transition:
-        transform 0.14s ease,
-        background 0.25s ease,
-        box-shadow 0.25s ease,
-        opacity 0.25s ease;
-      will-change: transform;
     }
 
-    .hello-btn.pulse {
+    .emoji-btn::before {
+      content: "";
+      position: absolute;
+      inset: 10px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 35% 25%, rgba(255,255,255,0.18), transparent 45%);
+      pointer-events: none;
+    }
+
+    .emoji-btn.pulse {
       animation: pulse 1.8s infinite;
     }
 
@@ -167,16 +174,25 @@
       }
     }
 
-    .hello-btn.orange {
+    .emoji-btn.yellow {
       background:
-        radial-gradient(circle at 30% 30%, #ffd45a 0%, #ff8a00 68%, #cc5c00 100%);
+        radial-gradient(circle at 30% 30%, #ffe27a 0%, #ffb300 68%, #d88200 100%);
       box-shadow:
-        0 0 30px rgba(255,166,0,0.26),
+        0 0 30px rgba(255,196,0,0.26),
         0 18px 36px rgba(0,0,0,0.35),
         inset 0 8px 18px rgba(255,255,255,0.18);
     }
 
-    .hello-btn.red {
+    .emoji-btn.orange {
+      background:
+        radial-gradient(circle at 30% 30%, #ffd45a 0%, #ff8a00 68%, #cc5c00 100%);
+      box-shadow:
+        0 0 30px rgba(255,166,0,0.28),
+        0 18px 36px rgba(0,0,0,0.35),
+        inset 0 8px 18px rgba(255,255,255,0.18);
+    }
+
+    .emoji-btn.red {
       background:
         radial-gradient(circle at 30% 30%, #ff7d7d 0%, #ff2f2f 68%, #b30000 100%);
       box-shadow:
@@ -185,7 +201,7 @@
         inset 0 8px 18px rgba(255,255,255,0.14);
     }
 
-    .hello-btn.shake {
+    .emoji-btn.shake {
       animation: shake 0.32s linear infinite;
     }
 
@@ -198,14 +214,28 @@
       100% { transform: translate(0, 0) scale(var(--scale, 1)); }
     }
 
-    .hello-btn.boom-hidden {
+    .emoji-btn.boom-hidden {
       opacity: 0;
       transform: scale(0.6);
       pointer-events: none;
     }
 
+    .emoji-face {
+      position: relative;
+      z-index: 2;
+      font-size: 82px;
+      line-height: 1;
+      filter: drop-shadow(0 4px 10px rgba(0,0,0,0.18));
+      transition: transform 0.2s ease, filter 0.2s ease;
+      pointer-events: none;
+    }
+
+    .emoji-btn:active .emoji-face {
+      transform: scale(0.96);
+    }
+
     .counter {
-      margin-top: 16px;
+      margin-top: 10px;
       font-size: 14px;
       color: rgba(255,255,255,0.78);
       min-height: 20px;
@@ -215,6 +245,55 @@
       margin-top: 10px;
       font-size: 13px;
       color: rgba(255,255,255,0.48);
+    }
+
+    .result-wrap {
+      min-height: 92px;
+      margin-top: 18px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .result-card {
+      width: 100%;
+      max-width: 280px;
+      padding: 16px 18px;
+      border-radius: 20px;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.08);
+      box-shadow:
+        0 16px 30px rgba(0,0,0,0.22),
+        inset 0 1px 0 rgba(255,255,255,0.05);
+      opacity: 0;
+      transform: translateY(10px) scale(0.96);
+      transition: 0.28s ease;
+      pointer-events: none;
+    }
+
+    .result-card.show {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+
+    .result-label {
+      font-size: 13px;
+      color: rgba(255,255,255,0.66);
+      margin-bottom: 6px;
+    }
+
+    .result-number {
+      font-size: 40px;
+      font-weight: 800;
+      letter-spacing: -0.04em;
+      color: #fff;
+      text-shadow: 0 0 20px rgba(255,255,255,0.18);
+    }
+
+    .result-sub {
+      margin-top: 6px;
+      font-size: 13px;
+      color: rgba(255,255,255,0.58);
     }
 
     .again-btn {
@@ -230,6 +309,11 @@
       box-shadow: 0 12px 28px rgba(47,108,255,0.32);
       cursor: pointer;
       display: none;
+      transition: transform 0.18s ease, box-shadow 0.18s ease;
+    }
+
+    .again-btn:active {
+      transform: translateY(1px) scale(0.98);
     }
 
     .again-btn.show {
@@ -248,7 +332,7 @@
       pointer-events: none;
       opacity: 1;
       transform: translate(0, 0) scale(1);
-      animation: fly 900ms cubic-bezier(.15,.75,.25,1) forwards;
+      animation: fly 950ms cubic-bezier(.15,.75,.25,1) forwards;
       box-shadow: 0 0 18px currentColor;
     }
 
@@ -297,19 +381,30 @@
 
   <div class="app">
     <div class="badge">Telegram Mini App Test</div>
-    <h1>Кнопка «Привет»</h1>
+    <h1>Злой смайлик</h1>
     <div class="sub">
-      Жми на кнопку. Она будет надуваться, злиться и в конце красиво разлетится на части.
+      Жми на смайлик. С каждым нажатием он будет всё сильнее беситься, а после взрыва выпадет случайное число.
     </div>
 
     <div class="arena" id="arena">
-      <div class="tap-zone" id="tapZone">
-        <button class="hello-btn pulse" id="helloBtn">Привет</button>
+      <div class="tap-zone">
+        <button class="emoji-btn pulse" id="emojiBtn" aria-label="Смайлик">
+          <div class="emoji-face" id="emojiFace">🙂</div>
+        </button>
       </div>
     </div>
 
     <div class="counter" id="counter">Нажатий: 0</div>
-    <div class="hint">На 10-м нажатии — взрыв.</div>
+    <div class="hint">На 10-м нажатии — взрыв и случайное число.</div>
+
+    <div class="result-wrap">
+      <div class="result-card" id="resultCard">
+        <div class="result-label">Твой случайный результат</div>
+        <div class="result-number" id="resultNumber">0</div>
+        <div class="result-sub">Число выпало после взрыва</div>
+      </div>
+    </div>
+
     <button class="again-btn" id="againBtn">Ещё раз</button>
   </div>
 
@@ -319,34 +414,46 @@
       Telegram.WebApp.expand();
     }
 
-    const helloBtn = document.getElementById("helloBtn");
+    const emojiBtn = document.getElementById("emojiBtn");
+    const emojiFace = document.getElementById("emojiFace");
     const againBtn = document.getElementById("againBtn");
     const counter = document.getElementById("counter");
     const arena = document.getElementById("arena");
-    const tapZone = document.getElementById("tapZone");
+    const resultCard = document.getElementById("resultCard");
+    const resultNumber = document.getElementById("resultNumber");
 
     let clicks = 0;
     let exploded = false;
 
+    function getEmojiByClicks(value) {
+      if (value <= 2) return "🙂";
+      if (value <= 4) return "😐";
+      if (value <= 6) return "😠";
+      if (value <= 8) return "😡";
+      return "🤬";
+    }
+
     function updateVisualState() {
       const scale = 1 + clicks * 0.08;
-      helloBtn.style.setProperty("--scale", scale.toFixed(2));
-      helloBtn.style.transform = `scale(${scale})`;
+      emojiBtn.style.setProperty("--scale", scale.toFixed(2));
+      emojiBtn.style.transform = `scale(${scale})`;
 
-      helloBtn.classList.remove("orange", "red", "shake");
+      emojiBtn.classList.remove("yellow", "orange", "red", "shake");
 
-      if (clicks >= 4) {
-        helloBtn.classList.add("orange");
+      if (clicks >= 3) {
+        emojiBtn.classList.add("yellow");
       }
 
-      if (clicks >= 7) {
-        helloBtn.classList.add("red");
+      if (clicks >= 6) {
+        emojiBtn.classList.add("orange");
       }
 
       if (clicks >= 8) {
-        helloBtn.classList.add("shake");
+        emojiBtn.classList.add("red");
+        emojiBtn.classList.add("shake");
       }
 
+      emojiFace.textContent = getEmojiByClicks(clicks);
       counter.textContent = `Нажатий: ${clicks}`;
     }
 
@@ -363,16 +470,16 @@
         "#ff2f6d", "#ffb347", "#ffe9a8", "#ff6b6b"
       ];
 
-      for (let i = 0; i < 28; i++) {
+      for (let i = 0; i < 34; i++) {
         const p = document.createElement("div");
         p.className = "particle";
 
-        const angle = (Math.PI * 2 * i) / 28 + (Math.random() * 0.35);
-        const distance = 80 + Math.random() * 120;
+        const angle = (Math.PI * 2 * i) / 34 + (Math.random() * 0.35);
+        const distance = 90 + Math.random() * 135;
         const x = Math.cos(angle) * distance;
         const y = Math.sin(angle) * distance;
 
-        const size = 8 + Math.random() * 12;
+        const size = 8 + Math.random() * 14;
         const color = colors[Math.floor(Math.random() * colors.length)];
 
         p.style.setProperty("--x", `${x}px`);
@@ -389,21 +496,31 @@
         }
 
         arena.appendChild(p);
-        setTimeout(() => p.remove(), 950);
+        setTimeout(() => p.remove(), 1000);
       }
     }
 
-    function explodeButton() {
+    function getRandomInt(min, max) {
+      return Math.floor(Math.random() * (max - min + 1)) + min;
+    }
+
+    function explodeEmoji() {
       exploded = true;
-      helloBtn.classList.remove("pulse", "shake");
-      helloBtn.classList.add("boom-hidden");
+      emojiBtn.classList.remove("pulse", "shake");
+      emojiBtn.classList.add("boom-hidden");
+
       createFlash();
       createParticles();
-      counter.textContent = "Бах. Кнопка уничтожена.";
+
+      const randomValue = getRandomInt(1, 100);
+      resultNumber.textContent = randomValue;
+      resultCard.classList.add("show");
+
+      counter.textContent = "Бах. Смайлик не выдержал.";
       againBtn.classList.add("show");
     }
 
-    function pressButton(event) {
+    function pressEmoji(event) {
       event.preventDefault();
       if (exploded) return;
 
@@ -411,13 +528,13 @@
       updateVisualState();
 
       if (clicks >= 10) {
-        explodeButton();
+        explodeEmoji();
       }
     }
 
-    helloBtn.addEventListener("pointerdown", pressButton, { passive: false });
+    emojiBtn.addEventListener("pointerdown", pressEmoji, { passive: false });
 
-    helloBtn.addEventListener("click", (event) => {
+    emojiBtn.addEventListener("click", (event) => {
       event.preventDefault();
     }, { passive: false });
 
@@ -425,12 +542,14 @@
       clicks = 0;
       exploded = false;
 
-      helloBtn.className = "hello-btn pulse";
-      helloBtn.textContent = "Привет";
-      helloBtn.style.transform = "scale(1)";
-      helloBtn.style.removeProperty("--scale");
+      emojiBtn.className = "emoji-btn pulse";
+      emojiFace.textContent = "🙂";
+      emojiBtn.style.transform = "scale(1)";
+      emojiBtn.style.removeProperty("--scale");
 
       counter.textContent = "Нажатий: 0";
+      resultNumber.textContent = "0";
+      resultCard.classList.remove("show");
       againBtn.classList.remove("show");
     });
   </script>

@@ -1,60 +1,438 @@
 <!DOCTYPE html>
-<html>
+<html lang="ru">
 <head>
-  <meta charset="UTF-8">
-  <title>Test App</title>
+  <meta charset="UTF-8" />
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+  />
+  <title>Telegram Mini App</title>
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
   <style>
-    body {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      background: #111;
+    * {
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+      user-select: none;
+      -webkit-user-select: none;
     }
 
-    button {
+    html, body {
+      margin: 0;
+      width: 100%;
+      min-height: 100%;
+      overflow: hidden;
+      touch-action: manipulation;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background:
+        radial-gradient(circle at top, rgba(0, 255, 170, 0.15), transparent 30%),
+        radial-gradient(circle at bottom, rgba(255, 70, 70, 0.12), transparent 35%),
+        linear-gradient(160deg, #081018 0%, #111827 45%, #06080d 100%);
+      color: #fff;
+    }
+
+    body {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .bg-glow {
+      position: fixed;
+      width: 420px;
+      height: 420px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(0,255,150,0.18), transparent 65%);
+      filter: blur(30px);
+      pointer-events: none;
+      animation: floatGlow 4s ease-in-out infinite;
+    }
+
+    @keyframes floatGlow {
+      0%, 100% { transform: translateY(0) scale(1); }
+      50% { transform: translateY(-12px) scale(1.06); }
+    }
+
+    .app {
+      position: relative;
+      z-index: 2;
+      width: min(92vw, 420px);
+      padding: 28px 22px 30px;
+      border-radius: 28px;
+      text-align: center;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.08);
+      backdrop-filter: blur(16px);
+      box-shadow:
+        0 20px 60px rgba(0,0,0,0.45),
+        inset 0 1px 0 rgba(255,255,255,0.05);
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 8px 14px;
+      border-radius: 999px;
+      font-size: 13px;
+      color: rgba(255,255,255,0.82);
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.07);
+      margin-bottom: 16px;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: 30px;
+      line-height: 1.1;
+      letter-spacing: -0.03em;
+    }
+
+    .sub {
+      margin: 10px 0 24px;
+      font-size: 15px;
+      line-height: 1.45;
+      color: rgba(255,255,255,0.72);
+    }
+
+    .arena {
+      position: relative;
+      height: 320px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: visible;
+    }
+
+    /* СТАБИЛЬНАЯ ЗОНА НАЖАТИЯ */
+    .tap-zone {
+      position: relative;
+      width: 220px;
+      height: 220px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      touch-action: manipulation;
+    }
+
+    /* ВИЗУАЛЬНАЯ КНОПКА */
+    .hello-btn {
+      position: relative;
       width: 150px;
       height: 150px;
-      border-radius: 50%;
       border: none;
-      font-size: 20px;
-      background: green;
-      color: white;
-      transition: 0.2s;
+      border-radius: 50%;
+      cursor: pointer;
+      touch-action: manipulation;
+      outline: none;
+      color: #fff;
+      font-size: 24px;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      background:
+        radial-gradient(circle at 30% 30%, #53ff9f 0%, #00b85c 65%, #00793c 100%);
+      box-shadow:
+        0 0 30px rgba(0,255,140,0.22),
+        0 18px 36px rgba(0,0,0,0.35),
+        inset 0 8px 18px rgba(255,255,255,0.22);
+      transform: scale(1);
+      transition:
+        transform 0.14s ease,
+        background 0.25s ease,
+        box-shadow 0.25s ease,
+        opacity 0.25s ease;
+      will-change: transform;
+    }
+
+    .hello-btn.pulse {
+      animation: pulse 1.8s infinite;
+    }
+
+    @keyframes pulse {
+      0% {
+        box-shadow:
+          0 0 0 0 rgba(0,255,140,0.26),
+          0 18px 36px rgba(0,0,0,0.35),
+          inset 0 8px 18px rgba(255,255,255,0.22);
+      }
+      70% {
+        box-shadow:
+          0 0 0 26px rgba(0,255,140,0),
+          0 18px 36px rgba(0,0,0,0.35),
+          inset 0 8px 18px rgba(255,255,255,0.22);
+      }
+      100% {
+        box-shadow:
+          0 0 0 0 rgba(0,255,140,0),
+          0 18px 36px rgba(0,0,0,0.35),
+          inset 0 8px 18px rgba(255,255,255,0.22);
+      }
+    }
+
+    .hello-btn.orange {
+      background:
+        radial-gradient(circle at 30% 30%, #ffd45a 0%, #ff8a00 68%, #cc5c00 100%);
+      box-shadow:
+        0 0 30px rgba(255,166,0,0.26),
+        0 18px 36px rgba(0,0,0,0.35),
+        inset 0 8px 18px rgba(255,255,255,0.18);
+    }
+
+    .hello-btn.red {
+      background:
+        radial-gradient(circle at 30% 30%, #ff7d7d 0%, #ff2f2f 68%, #b30000 100%);
+      box-shadow:
+        0 0 34px rgba(255,60,60,0.34),
+        0 18px 36px rgba(0,0,0,0.35),
+        inset 0 8px 18px rgba(255,255,255,0.14);
+    }
+
+    .hello-btn.shake {
+      animation: shake 0.32s linear infinite;
+    }
+
+    @keyframes shake {
+      0% { transform: translate(0, 0) scale(var(--scale, 1)); }
+      20% { transform: translate(-2px, 1px) scale(var(--scale, 1)); }
+      40% { transform: translate(2px, -1px) scale(var(--scale, 1)); }
+      60% { transform: translate(-2px, -1px) scale(var(--scale, 1)); }
+      80% { transform: translate(2px, 1px) scale(var(--scale, 1)); }
+      100% { transform: translate(0, 0) scale(var(--scale, 1)); }
+    }
+
+    .hello-btn.boom-hidden {
+      opacity: 0;
+      transform: scale(0.6);
+      pointer-events: none;
+    }
+
+    .counter {
+      margin-top: 16px;
+      font-size: 14px;
+      color: rgba(255,255,255,0.78);
+      min-height: 20px;
+    }
+
+    .hint {
+      margin-top: 10px;
+      font-size: 13px;
+      color: rgba(255,255,255,0.48);
+    }
+
+    .again-btn {
+      margin-top: 18px;
+      border: none;
+      border-radius: 16px;
+      padding: 14px 18px;
+      min-width: 160px;
+      font-size: 16px;
+      font-weight: 700;
+      color: #fff;
+      background: linear-gradient(135deg, #2b80ff, #6d4dff);
+      box-shadow: 0 12px 28px rgba(47,108,255,0.32);
+      cursor: pointer;
+      display: none;
+    }
+
+    .again-btn.show {
+      display: inline-block;
+    }
+
+    .particle {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      width: 14px;
+      height: 14px;
+      margin-left: -7px;
+      margin-top: -7px;
+      border-radius: 50%;
+      pointer-events: none;
+      opacity: 1;
+      transform: translate(0, 0) scale(1);
+      animation: fly 900ms cubic-bezier(.15,.75,.25,1) forwards;
+      box-shadow: 0 0 18px currentColor;
+    }
+
+    @keyframes fly {
+      0% {
+        opacity: 1;
+        transform: translate(0, 0) scale(1);
+      }
+      70% {
+        opacity: 1;
+      }
+      100% {
+        opacity: 0;
+        transform: translate(var(--x), var(--y)) scale(0.2) rotate(360deg);
+      }
+    }
+
+    .flash {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      width: 40px;
+      height: 40px;
+      transform: translate(-50%, -50%) scale(0.2);
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(255,255,255,0.95), rgba(255,120,120,0.4), transparent 72%);
+      pointer-events: none;
+      opacity: 0;
+      animation: flash 420ms ease-out forwards;
+    }
+
+    @keyframes flash {
+      0% {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(0.2);
+      }
+      100% {
+        opacity: 0;
+        transform: translate(-50%, -50%) scale(7);
+      }
     }
   </style>
 </head>
 <body>
+  <div class="bg-glow"></div>
 
-<button id="btn">Привет</button>
+  <div class="app">
+    <div class="badge">Telegram Mini App Test</div>
+    <h1>Кнопка «Привет»</h1>
+    <div class="sub">
+      Жми на кнопку. Она будет надуваться, злиться и в конце красиво разлетится на части.
+    </div>
 
-<script>
-  let btn = document.getElementById("btn");
-  let size = 150;
-  let clicks = 0;
+    <div class="arena" id="arena">
+      <div class="tap-zone" id="tapZone">
+        <button class="hello-btn pulse" id="helloBtn">Привет</button>
+      </div>
+    </div>
 
-  btn.onclick = () => {
-    clicks++;
+    <div class="counter" id="counter">Нажатий: 0</div>
+    <div class="hint">На 10-м нажатии — взрыв.</div>
+    <button class="again-btn" id="againBtn">Ещё раз</button>
+  </div>
 
-    size += 10;
-    btn.style.width = size + "px";
-    btn.style.height = size + "px";
-
-    if (clicks > 3) btn.style.background = "orange";
-    if (clicks > 6) btn.style.background = "red";
-
-    if (clicks > 9) {
-      btn.innerText = "💥";
-      btn.style.background = "black";
-      btn.style.color = "red";
-      btn.style.transform = "scale(2)";
-      setTimeout(() => {
-        btn.remove();
-      }, 500);
+  <script>
+    if (window.Telegram && Telegram.WebApp) {
+      Telegram.WebApp.ready();
+      Telegram.WebApp.expand();
     }
-  }
-</script>
 
+    const helloBtn = document.getElementById("helloBtn");
+    const againBtn = document.getElementById("againBtn");
+    const counter = document.getElementById("counter");
+    const arena = document.getElementById("arena");
+    const tapZone = document.getElementById("tapZone");
+
+    let clicks = 0;
+    let exploded = false;
+
+    function updateVisualState() {
+      const scale = 1 + clicks * 0.08;
+      helloBtn.style.setProperty("--scale", scale.toFixed(2));
+      helloBtn.style.transform = `scale(${scale})`;
+
+      helloBtn.classList.remove("orange", "red", "shake");
+
+      if (clicks >= 4) {
+        helloBtn.classList.add("orange");
+      }
+
+      if (clicks >= 7) {
+        helloBtn.classList.add("red");
+      }
+
+      if (clicks >= 8) {
+        helloBtn.classList.add("shake");
+      }
+
+      counter.textContent = `Нажатий: ${clicks}`;
+    }
+
+    function createFlash() {
+      const flash = document.createElement("div");
+      flash.className = "flash";
+      arena.appendChild(flash);
+      setTimeout(() => flash.remove(), 450);
+    }
+
+    function createParticles() {
+      const colors = [
+        "#ffffff", "#ff4d4d", "#ff7a00", "#ffd54a",
+        "#ff2f6d", "#ffb347", "#ffe9a8", "#ff6b6b"
+      ];
+
+      for (let i = 0; i < 28; i++) {
+        const p = document.createElement("div");
+        p.className = "particle";
+
+        const angle = (Math.PI * 2 * i) / 28 + (Math.random() * 0.35);
+        const distance = 80 + Math.random() * 120;
+        const x = Math.cos(angle) * distance;
+        const y = Math.sin(angle) * distance;
+
+        const size = 8 + Math.random() * 12;
+        const color = colors[Math.floor(Math.random() * colors.length)];
+
+        p.style.setProperty("--x", `${x}px`);
+        p.style.setProperty("--y", `${y}px`);
+        p.style.width = `${size}px`;
+        p.style.height = `${size}px`;
+        p.style.marginLeft = `${-size / 2}px`;
+        p.style.marginTop = `${-size / 2}px`;
+        p.style.background = color;
+        p.style.color = color;
+
+        if (Math.random() > 0.55) {
+          p.style.borderRadius = "3px";
+        }
+
+        arena.appendChild(p);
+        setTimeout(() => p.remove(), 950);
+      }
+    }
+
+    function explodeButton() {
+      exploded = true;
+      helloBtn.classList.remove("pulse", "shake");
+      helloBtn.classList.add("boom-hidden");
+      createFlash();
+      createParticles();
+      counter.textContent = "Бах. Кнопка уничтожена.";
+      againBtn.classList.add("show");
+    }
+
+    function pressButton(event) {
+      event.preventDefault();
+      if (exploded) return;
+
+      clicks += 1;
+      updateVisualState();
+
+      if (clicks >= 10) {
+        explodeButton();
+      }
+    }
+
+    helloBtn.addEventListener("pointerdown", pressButton, { passive: false });
+
+    helloBtn.addEventListener("click", (event) => {
+      event.preventDefault();
+    }, { passive: false });
+
+    againBtn.addEventListener("click", () => {
+      clicks = 0;
+      exploded = false;
+
+      helloBtn.className = "hello-btn pulse";
+      helloBtn.textContent = "Привет";
+      helloBtn.style.transform = "scale(1)";
+      helloBtn.style.removeProperty("--scale");
+
+      counter.textContent = "Нажатий: 0";
+      againBtn.classList.remove("show");
+    });
+  </script>
 </body>
 </html>

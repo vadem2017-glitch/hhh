@@ -13,7 +13,7 @@
       --safe-top: env(safe-area-inset-top, 0px);
       --safe-bottom: env(safe-area-inset-bottom, 0px);
       --card-w: min(92vw, 420px);
-      --face-size: clamp(138px, 34vw, 198px);
+      --rocket-size: clamp(150px, 36vw, 215px);
       --text-main: rgba(255,255,255,0.96);
       --text-soft: rgba(255,255,255,0.72);
       --text-dim: rgba(255,255,255,0.48);
@@ -35,9 +35,9 @@
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
       color: #fff;
       background:
-        radial-gradient(circle at top, rgba(0,255,170,0.12), transparent 30%),
-        radial-gradient(circle at bottom, rgba(255,70,70,0.10), transparent 34%),
-        linear-gradient(160deg, #081018 0%, #111827 45%, #06080d 100%);
+        radial-gradient(circle at top, rgba(0,255,170,0.10), transparent 30%),
+        radial-gradient(circle at bottom, rgba(255,70,70,0.10), transparent 36%),
+        linear-gradient(160deg, #081018 0%, #111827 45%, #05070b 100%);
     }
 
     body {
@@ -51,20 +51,46 @@
         12px;
     }
 
+    .bg-stars,
     .bg-glow {
       position: fixed;
-      width: 440px;
-      height: 440px;
-      border-radius: 50%;
-      background: radial-gradient(circle, rgba(0,255,160,0.16), transparent 65%);
-      filter: blur(34px);
+      inset: 0;
       pointer-events: none;
-      animation: floatGlow 4.2s ease-in-out infinite;
+    }
+
+    .bg-glow::before {
+      content: "";
+      position: absolute;
+      left: 50%;
+      top: 52%;
+      width: 420px;
+      height: 420px;
+      transform: translate(-50%, -50%);
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(82,180,255,0.18), transparent 65%);
+      filter: blur(34px);
+      animation: floatGlow 4s ease-in-out infinite;
     }
 
     @keyframes floatGlow {
-      0%, 100% { transform: translateY(0) scale(1); }
-      50% { transform: translateY(-10px) scale(1.06); }
+      0%, 100% { transform: translate(-50%, -50%) scale(1); }
+      50% { transform: translate(-50%, calc(-50% - 10px)) scale(1.05); }
+    }
+
+    .star {
+      position: absolute;
+      width: 2px;
+      height: 2px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.8);
+      box-shadow: 0 0 10px rgba(255,255,255,0.4);
+      animation: twinkle var(--dur) ease-in-out infinite;
+      opacity: var(--op);
+    }
+
+    @keyframes twinkle {
+      0%, 100% { opacity: var(--op); transform: scale(1); }
+      50% { opacity: 1; transform: scale(1.8); }
     }
 
     .app {
@@ -117,73 +143,64 @@
     .arena {
       position: relative;
       flex: 1 1 auto;
-      min-height: 250px;
+      min-height: 280px;
       display: flex;
       align-items: center;
       justify-content: center;
-      overflow: visible;
-      padding: 4px 0;
+      overflow: hidden;
+      padding: 6px 0;
     }
 
     .tap-zone {
       position: relative;
-      width: min(76vw, 280px);
-      height: min(76vw, 280px);
+      width: min(80vw, 290px);
+      height: min(84vw, 320px);
       display: flex;
       align-items: center;
       justify-content: center;
       touch-action: manipulation;
     }
 
-    .smiley-btn {
+    .rocket-btn {
       position: absolute;
-      width: var(--face-size);
-      height: var(--face-size);
-      padding: 0;
+      width: var(--rocket-size);
+      height: calc(var(--rocket-size) * 1.34);
       border: none;
       background: transparent;
       outline: none;
       cursor: pointer;
-      transform: scale(1);
+      transform: translateY(0) scale(1);
       transition:
         transform 0.14s ease,
-        opacity 0.22s ease,
+        opacity 0.25s ease,
         filter 0.25s ease;
-      will-change: transform;
       touch-action: manipulation;
-      z-index: 3;
+      z-index: 4;
+      padding: 0;
+      will-change: transform;
     }
 
-    .smiley-btn.pulse .face-core {
-      animation: facePulse 1.8s infinite;
+    .rocket-btn.pulse .rocket-body {
+      animation: rocketPulse 2s infinite;
     }
 
-    @keyframes facePulse {
+    @keyframes rocketPulse {
       0% {
-        box-shadow:
-          0 0 0 0 rgba(255,206,52,0.24),
-          0 16px 30px rgba(0,0,0,0.30),
-          inset 0 10px 20px rgba(255,255,255,0.18);
+        filter: drop-shadow(0 0 0 rgba(95,190,255,0.00));
       }
-      70% {
-        box-shadow:
-          0 0 0 22px rgba(255,206,52,0),
-          0 16px 30px rgba(0,0,0,0.30),
-          inset 0 10px 20px rgba(255,255,255,0.18);
+      50% {
+        filter: drop-shadow(0 0 18px rgba(95,190,255,0.18));
       }
       100% {
-        box-shadow:
-          0 0 0 0 rgba(255,206,52,0),
-          0 16px 30px rgba(0,0,0,0.30),
-          inset 0 10px 20px rgba(255,255,255,0.18);
+        filter: drop-shadow(0 0 0 rgba(95,190,255,0.00));
       }
     }
 
-    .smiley-btn.shake {
-      animation: shake 0.26s linear infinite;
+    .rocket-btn.shake {
+      animation: rocketShake 0.18s linear infinite;
     }
 
-    @keyframes shake {
+    @keyframes rocketShake {
       0% { transform: translate(0, 0) scale(var(--scale, 1)); }
       20% { transform: translate(-2px, 1px) scale(var(--scale, 1)); }
       40% { transform: translate(2px, -1px) scale(var(--scale, 1)); }
@@ -192,182 +209,174 @@
       100% { transform: translate(0, 0) scale(var(--scale, 1)); }
     }
 
-    .smiley-btn.boom-hidden {
-      opacity: 0;
-      transform: scale(0.42);
+    .rocket-btn.launching {
+      animation: launchRocket 1.3s cubic-bezier(.18,.72,.24,1) forwards;
       pointer-events: none;
     }
 
-    .face-core {
-      position: absolute;
-      inset: 0;
-      border-radius: 50%;
-      background:
-        radial-gradient(circle at 35% 24%, rgba(255,255,255,0.26), rgba(255,255,255,0.06) 24%, transparent 28%),
-        radial-gradient(circle at 50% 58%, rgba(255,255,255,0.05), transparent 50%),
-        linear-gradient(180deg, #ffe56d 0%, #ffbe1b 58%, #ff9f00 100%);
-      box-shadow:
-        0 0 0 0 rgba(255,206,52,0.22),
-        0 16px 30px rgba(0,0,0,0.30),
-        inset 0 10px 20px rgba(255,255,255,0.18);
-      transition: background 0.22s ease, box-shadow 0.22s ease, filter 0.22s ease;
+    @keyframes launchRocket {
+      0% {
+        transform: translateY(0) scale(var(--scale, 1));
+        opacity: 1;
+      }
+      10% {
+        transform: translateY(-8px) scale(calc(var(--scale, 1) * 1.02));
+      }
+      100% {
+        transform: translateY(-165vh) scale(calc(var(--scale, 1) * 0.88));
+        opacity: 0;
+      }
     }
 
-    .smiley-btn.yellow .face-core {
-      background:
-        radial-gradient(circle at 35% 24%, rgba(255,255,255,0.24), rgba(255,255,255,0.06) 24%, transparent 28%),
-        linear-gradient(180deg, #ffd95d 0%, #ffb000 58%, #f77b00 100%);
+    .rocket-svg {
+      width: 100%;
+      height: 100%;
+      overflow: visible;
+      filter: drop-shadow(0 22px 28px rgba(0,0,0,0.32));
     }
 
-    .smiley-btn.orange .face-core {
-      background:
-        radial-gradient(circle at 35% 24%, rgba(255,255,255,0.18), rgba(255,255,255,0.05) 24%, transparent 28%),
-        linear-gradient(180deg, #ffbd52 0%, #ff7c00 60%, #d84a00 100%);
-      box-shadow:
-        0 0 28px rgba(255,124,0,0.22),
-        0 16px 30px rgba(0,0,0,0.30),
-        inset 0 8px 18px rgba(255,255,255,0.12);
+    .rocket-body {
+      transition: transform 0.2s ease, filter 0.2s ease;
     }
 
-    .smiley-btn.red .face-core {
-      background:
-        radial-gradient(circle at 35% 24%, rgba(255,255,255,0.14), rgba(255,255,255,0.04) 24%, transparent 28%),
-        linear-gradient(180deg, #ff8f8f 0%, #ff3737 58%, #b60000 100%);
-      box-shadow:
-        0 0 34px rgba(255,55,55,0.32),
-        0 16px 30px rgba(0,0,0,0.32),
-        inset 0 7px 16px rgba(255,255,255,0.10);
-      filter: saturate(1.05);
+    .hull-main {
+      transition: fill 0.25s ease;
     }
 
-    .eye {
-      position: absolute;
-      top: 34%;
-      width: 13%;
-      height: 18%;
-      background: #1f1000;
-      border-radius: 50%;
-      transition: all 0.22s ease;
-      box-shadow: inset 0 -1px 0 rgba(255,255,255,0.05);
+    .hull-shadow,
+    .window-glow,
+    .flame-core,
+    .flame-outer,
+    .booster-light,
+    .smoke {
+      transition: all 0.25s ease;
     }
 
-    .eye.left { left: 28%; }
-    .eye.right { right: 28%; }
+    .rocket-btn.stage-1 .hull-main { fill: #e7eefc; }
+    .rocket-btn.stage-2 .hull-main { fill: #dde8ff; }
+    .rocket-btn.stage-3 .hull-main { fill: #d5e3ff; }
+    .rocket-btn.stage-4 .hull-main { fill: #cfe0ff; }
+    .rocket-btn.stage-5 .hull-main { fill: #c8dbff; }
 
-    .eye::after {
-      content: "";
-      position: absolute;
-      width: 26%;
-      height: 26%;
-      top: 20%;
-      left: 22%;
-      border-radius: 50%;
-      background: rgba(255,255,255,0.18);
-      transition: opacity 0.22s ease;
+    .rocket-btn .window-glow {
+      opacity: 0.25;
+      fill: #7fe1ff;
     }
 
-    .brow {
-      position: absolute;
-      top: 24%;
-      width: 20%;
-      height: 4%;
-      background: #5c2200;
-      border-radius: 999px;
-      transition: all 0.22s ease;
+    .rocket-btn.stage-2 .window-glow { opacity: 0.42; }
+    .rocket-btn.stage-3 .window-glow { opacity: 0.60; }
+    .rocket-btn.stage-4 .window-glow { opacity: 0.78; }
+    .rocket-btn.stage-5 .window-glow { opacity: 0.96; }
+
+    .rocket-btn .booster-light {
+      opacity: 0.15;
+    }
+
+    .rocket-btn.stage-2 .booster-light { opacity: 0.38; }
+    .rocket-btn.stage-3 .booster-light { opacity: 0.55; }
+    .rocket-btn.stage-4 .booster-light { opacity: 0.80; }
+    .rocket-btn.stage-5 .booster-light { opacity: 1; }
+
+    .rocket-btn .flame-outer,
+    .rocket-btn .flame-core,
+    .rocket-btn .smoke {
       opacity: 0;
+      transform-origin: 50% 0%;
     }
 
-    .brow.left { left: 22%; transform: rotate(0deg); }
-    .brow.right { right: 22%; transform: rotate(0deg); }
+    .rocket-btn.stage-2 .flame-outer { opacity: 0.35; }
+    .rocket-btn.stage-2 .flame-core { opacity: 0.22; }
 
-    .mouth-svg {
+    .rocket-btn.stage-3 .flame-outer { opacity: 0.55; }
+    .rocket-btn.stage-3 .flame-core { opacity: 0.42; }
+
+    .rocket-btn.stage-4 .flame-outer,
+    .rocket-btn.stage-4 .flame-core,
+    .rocket-btn.stage-4 .smoke {
+      opacity: 0.78;
+    }
+
+    .rocket-btn.stage-5 .flame-outer,
+    .rocket-btn.stage-5 .flame-core,
+    .rocket-btn.stage-5 .smoke {
+      opacity: 1;
+    }
+
+    .rocket-btn.stage-4 .flame-outer,
+    .rocket-btn.stage-4 .flame-core,
+    .rocket-btn.stage-5 .flame-outer,
+    .rocket-btn.stage-5 .flame-core {
+      animation: flameFlicker 0.12s ease-in-out infinite alternate;
+    }
+
+    .rocket-btn.stage-4 .smoke,
+    .rocket-btn.stage-5 .smoke {
+      animation: smokePulse 0.35s ease-in-out infinite alternate;
+    }
+
+    @keyframes flameFlicker {
+      0% { transform: scaleY(0.92) translateY(0); }
+      100% { transform: scaleY(1.12) translateY(3px); }
+    }
+
+    @keyframes smokePulse {
+      0% { transform: translateY(0) scale(0.96); opacity: 0.72; }
+      100% { transform: translateY(6px) scale(1.06); opacity: 1; }
+    }
+
+    .launch-trail {
       position: absolute;
       left: 50%;
-      top: 58%;
-      width: 38%;
-      height: 20%;
+      bottom: 16%;
+      width: 54px;
+      height: 180px;
       transform: translateX(-50%);
-      overflow: visible;
-      transition: top 0.22s ease, width 0.22s ease, height 0.22s ease;
-    }
-
-    .mouth-path {
-      transition: d 0.22s ease;
-    }
-
-    .tongue-svg {
       opacity: 0;
-      transition: opacity 0.18s ease;
+      pointer-events: none;
+      z-index: 2;
     }
 
-    .stage-1 .brow,
-    .stage-2 .brow {
-      opacity: 0;
+    .launch-trail.show {
+      opacity: 1;
+      animation: trailGrow 1.15s ease-out forwards;
     }
 
-    .stage-1 .eye,
-    .stage-2 .eye {
-      top: 35%;
-      width: 13%;
-      height: 18%;
+    @keyframes trailGrow {
+      0% {
+        opacity: 0.1;
+        transform: translateX(-50%) scaleY(0.2);
+      }
+      18% {
+        opacity: 1;
+      }
+      100% {
+        opacity: 0;
+        transform: translateX(-50%) translateY(48px) scaleY(1.35);
+      }
+    }
+
+    .trail-flame {
+      position: absolute;
+      left: 50%;
+      top: 0;
+      width: 32px;
+      height: 80px;
+      transform: translateX(-50%);
+      background: radial-gradient(circle at 50% 0%, #fff4b3 0%, #ffb300 46%, #ff5a00 75%, transparent 100%);
+      filter: blur(3px);
+      border-radius: 50% 50% 55% 55%;
+    }
+
+    .trail-smoke {
+      position: absolute;
+      left: 50%;
+      bottom: 0;
+      width: 54px;
+      height: 120px;
+      transform: translateX(-50%);
+      background: radial-gradient(circle at 50% 20%, rgba(255,255,255,0.55) 0%, rgba(225,235,255,0.18) 45%, transparent 70%);
+      filter: blur(10px);
       border-radius: 50%;
-      transform: rotate(0deg);
-    }
-
-    .stage-3 .brow {
-      opacity: 1;
-      top: 26%;
-      width: 18%;
-      height: 4%;
-    }
-
-    .stage-3 .brow.left { transform: rotate(14deg); }
-    .stage-3 .brow.right { transform: rotate(-14deg); }
-
-    .stage-3 .eye {
-      top: 36%;
-      width: 14%;
-      height: 12%;
-      border-radius: 40% 40% 50% 50%;
-    }
-
-    .stage-4 .brow,
-    .stage-5 .brow {
-      opacity: 1;
-      top: 24%;
-      width: 22%;
-      height: 4.2%;
-      background: #4f1500;
-    }
-
-    .stage-4 .brow.left { transform: rotate(26deg); }
-    .stage-4 .brow.right { transform: rotate(-26deg); }
-    .stage-5 .brow.left { transform: rotate(34deg); }
-    .stage-5 .brow.right { transform: rotate(-34deg); }
-
-    .stage-4 .eye {
-      top: 38%;
-      width: 15%;
-      height: 8%;
-      border-radius: 999px;
-    }
-
-    .stage-5 .eye {
-      top: 38%;
-      width: 16%;
-      height: 7%;
-      border-radius: 999px;
-      background: #270300;
-    }
-
-    .stage-4 .eye.left { transform: rotate(14deg); }
-    .stage-4 .eye.right { transform: rotate(-14deg); }
-    .stage-5 .eye.left { transform: rotate(18deg); }
-    .stage-5 .eye.right { transform: rotate(-18deg); }
-
-    .stage-4 .eye::after,
-    .stage-5 .eye::after {
-      opacity: 0;
     }
 
     .counter {
@@ -399,7 +408,7 @@
       opacity: 0;
       pointer-events: none;
       transition: opacity 0.28s ease, transform 0.28s ease;
-      z-index: 4;
+      z-index: 6;
     }
 
     .center-result.show {
@@ -465,7 +474,7 @@
       transform: translate(0, 0) scale(1);
       animation: fly 980ms cubic-bezier(.15,.75,.25,1) forwards;
       box-shadow: 0 0 18px currentColor;
-      z-index: 5;
+      z-index: 7;
     }
 
     @keyframes fly {
@@ -473,9 +482,7 @@
         opacity: 1;
         transform: translate(0, 0) scale(1) rotate(0deg);
       }
-      72% {
-        opacity: 1;
-      }
+      72% { opacity: 1; }
       100% {
         opacity: 0;
         transform: translate(var(--x), var(--y)) scale(0.18) rotate(360deg);
@@ -490,11 +497,11 @@
       height: 40px;
       transform: translate(-50%, -50%) scale(0.2);
       border-radius: 50%;
-      background: radial-gradient(circle, rgba(255,255,255,0.95), rgba(255,120,120,0.4), transparent 72%);
+      background: radial-gradient(circle, rgba(255,255,255,0.95), rgba(120,180,255,0.42), transparent 72%);
       pointer-events: none;
       opacity: 0;
       animation: flash 420ms ease-out forwards;
-      z-index: 5;
+      z-index: 7;
     }
 
     @keyframes flash {
@@ -515,7 +522,7 @@
       }
 
       .arena {
-        min-height: 220px;
+        min-height: 236px;
       }
 
       .badge {
@@ -531,31 +538,17 @@
     }
 
     @media (max-height: 760px) {
-      .app {
-        gap: 7px;
-      }
-
-      .arena {
-        min-height: 190px;
-      }
-
-      .sub {
-        font-size: 14px;
-      }
+      .app { gap: 7px; }
+      .arena { min-height: 205px; }
+      .sub { font-size: 14px; }
     }
 
     @media (max-height: 680px) {
-      :root {
-        --face-size: 130px;
-      }
+      :root { --rocket-size: 138px; }
 
-      .arena {
-        min-height: 168px;
-      }
+      .arena { min-height: 182px; }
 
-      h1 {
-        font-size: 26px;
-      }
+      h1 { font-size: 26px; }
 
       .sub {
         font-size: 13px;
@@ -572,55 +565,109 @@
   </style>
 </head>
 <body>
+  <div class="bg-stars" id="stars"></div>
   <div class="bg-glow"></div>
 
   <div class="app">
     <div class="badge">Telegram Mini App Test</div>
-    <h1>Злой смайлик</h1>
+    <h1>Ракета</h1>
     <div class="sub">
-      Жми на смайлик. Он будет всё сильнее беситься, менять лицо, а потом взорвётся и прямо на его месте покажет случайный результат.
+      Тапай по ракете. Двигатель начнёт запускаться, телефон будет пульсировать, потом ракета взлетит, а на её месте появится случайный результат.
     </div>
 
     <div class="arena" id="arena">
       <div class="tap-zone">
-        <button class="smiley-btn pulse stage-1" id="smileyBtn" aria-label="Злой смайлик">
-          <div class="face-core"></div>
+        <button class="rocket-btn pulse stage-1" id="rocketBtn" aria-label="Ракета">
+          <svg class="rocket-svg" viewBox="0 0 220 300" aria-hidden="true">
+            <defs>
+              <linearGradient id="hullGradient" x1="0" x2="0" y1="0" y2="1">
+                <stop offset="0%" stop-color="#f6fbff"/>
+                <stop offset="100%" stop-color="#d7e6ff"/>
+              </linearGradient>
+              <linearGradient id="noseGradient" x1="0" x2="0" y1="0" y2="1">
+                <stop offset="0%" stop-color="#ff6a7d"/>
+                <stop offset="100%" stop-color="#d9264f"/>
+              </linearGradient>
+              <linearGradient id="finGradient" x1="0" x2="1" y1="0" y2="1">
+                <stop offset="0%" stop-color="#4da2ff"/>
+                <stop offset="100%" stop-color="#2457ff"/>
+              </linearGradient>
+              <linearGradient id="flameGradient" x1="0" x2="0" y1="0" y2="1">
+                <stop offset="0%" stop-color="#fff6b1"/>
+                <stop offset="45%" stop-color="#ffb300"/>
+                <stop offset="100%" stop-color="#ff4f00"/>
+              </linearGradient>
+              <linearGradient id="flameCoreGradient" x1="0" x2="0" y1="0" y2="1">
+                <stop offset="0%" stop-color="#ffffff"/>
+                <stop offset="100%" stop-color="#ffd866"/>
+              </linearGradient>
+            </defs>
 
-          <div class="brow left"></div>
-          <div class="brow right"></div>
+            <g class="rocket-body">
+              <path class="fin-left" d="M62 170 C34 184, 20 212, 22 244 C45 233, 60 214, 70 188 Z" fill="url(#finGradient)"/>
+              <path class="fin-right" d="M158 170 C186 184, 200 212, 198 244 C175 233, 160 214, 150 188 Z" fill="url(#finGradient)"/>
+              <rect class="tail-base" x="88" y="198" width="44" height="34" rx="14" fill="#7a8cff"/>
 
-          <div class="eye left"></div>
-          <div class="eye right"></div>
+              <path class="hull-main" d="M110 20
+                C88 36, 68 74, 64 120
+                L64 190
+                C64 216, 84 236, 110 236
+                C136 236, 156 216, 156 190
+                L156 120
+                C152 74, 132 36, 110 20 Z" fill="url(#hullGradient)"/>
 
-          <svg class="mouth-svg" viewBox="0 0 100 60" aria-hidden="true">
-            <path
-              id="mouthPath"
-              class="mouth-path"
-              d="M20 28 Q50 48 80 28"
-              stroke="#5a1a00"
-              stroke-width="6"
-              fill="none"
-              stroke-linecap="round"
-            />
-            <path
-              id="tonguePath"
-              class="tongue-svg"
-              d="M35 36 Q50 54 65 36 L65 48 Q50 58 35 48 Z"
-              fill="#ff6f8f"
-            />
+              <path class="hull-shadow" d="M110 20
+                C127 36, 145 74, 149 120
+                L149 190
+                C149 208, 137 225, 120 232
+                C144 230, 156 211, 156 190
+                L156 120
+                C152 74, 132 36, 110 20 Z" fill="rgba(120,150,255,0.14)"/>
+
+              <path class="nose" d="M110 20 C99 28, 90 42, 84 58 C99 51, 121 51, 136 58 C130 42, 121 28, 110 20 Z" fill="url(#noseGradient)"/>
+
+              <circle cx="110" cy="105" r="26" fill="#1b4d8f"/>
+              <circle cx="110" cy="105" r="18" fill="#91ecff"/>
+              <circle class="window-glow" cx="110" cy="105" r="18"/>
+              <circle cx="103" cy="98" r="5" fill="rgba(255,255,255,0.55)"/>
+
+              <rect x="98" y="148" width="24" height="42" rx="10" fill="#ff5e6f"/>
+              <circle class="booster-light" cx="110" cy="171" r="8" fill="#fff3a8"/>
+            </g>
+
+            <g class="engine">
+              <ellipse class="smoke" cx="110" cy="252" rx="34" ry="18" fill="rgba(220,230,255,0.38)"/>
+              <path class="flame-outer" d="M110 228
+                C97 244, 88 266, 94 284
+                C100 278, 106 270, 110 300
+                C114 270, 120 278, 126 284
+                C132 266, 123 244, 110 228 Z"
+                fill="url(#flameGradient)"/>
+              <path class="flame-core" d="M110 236
+                C102 248, 100 264, 104 276
+                C108 270, 110 264, 110 286
+                C110 264, 112 270, 116 276
+                C120 264, 118 248, 110 236 Z"
+                fill="url(#flameCoreGradient)"/>
+            </g>
           </svg>
         </button>
+
+        <div class="launch-trail" id="launchTrail">
+          <div class="trail-flame"></div>
+          <div class="trail-smoke"></div>
+        </div>
 
         <div class="center-result" id="centerResult">
           <div class="center-result-label">Твой случайный результат</div>
           <div class="center-result-number" id="resultNumber">0</div>
-          <div class="center-result-sub">Число выпало после взрыва</div>
+          <div class="center-result-sub">Число выпало после старта</div>
         </div>
       </div>
     </div>
 
-    <div class="counter" id="counter">Нажатий: 0</div>
-    <div class="hint">На 10-м нажатии — взрыв и случайное число.</div>
+    <div class="counter" id="counter">Тапов: 0</div>
+    <div class="hint">На 10-м тапе — запуск ракеты и случайное число.</div>
 
     <button class="again-btn" id="againBtn">Ещё раз</button>
   </div>
@@ -631,18 +678,61 @@
       Telegram.WebApp.expand();
     }
 
-    const smileyBtn = document.getElementById("smileyBtn");
-    const mouthPath = document.getElementById("mouthPath");
-    const tonguePath = document.getElementById("tonguePath");
+    const stars = document.getElementById("stars");
+    const rocketBtn = document.getElementById("rocketBtn");
     const againBtn = document.getElementById("againBtn");
     const counter = document.getElementById("counter");
     const arena = document.getElementById("arena");
     const centerResult = document.getElementById("centerResult");
     const resultNumber = document.getElementById("resultNumber");
+    const launchTrail = document.getElementById("launchTrail");
 
     let clicks = 0;
-    let exploded = false;
+    let launched = false;
     let rollingTimer = null;
+    let preLaunchBuzzTimer = null;
+
+    function createStars() {
+      for (let i = 0; i < 22; i++) {
+        const s = document.createElement("div");
+        s.className = "star";
+        s.style.left = Math.random() * 100 + "%";
+        s.style.top = Math.random() * 100 + "%";
+        s.style.setProperty("--dur", (2 + Math.random() * 3).toFixed(2) + "s");
+        s.style.setProperty("--op", (0.25 + Math.random() * 0.6).toFixed(2));
+        stars.appendChild(s);
+      }
+    }
+
+    function vibrate(type) {
+      try {
+        if (window.Telegram && Telegram.WebApp && Telegram.WebApp.HapticFeedback) {
+          if (type === "light") Telegram.WebApp.HapticFeedback.impactOccurred("light");
+          if (type === "medium") Telegram.WebApp.HapticFeedback.impactOccurred("medium");
+          if (type === "heavy") Telegram.WebApp.HapticFeedback.impactOccurred("heavy");
+          if (type === "success") Telegram.WebApp.HapticFeedback.notificationOccurred("success");
+          if (type === "warning") Telegram.WebApp.HapticFeedback.notificationOccurred("warning");
+        }
+      } catch (e) {}
+    }
+
+    function startPreLaunchBuzz() {
+      stopPreLaunchBuzz();
+
+      let step = 0;
+      const pattern = ["light", "light", "medium", "light", "medium", "medium"];
+
+      preLaunchBuzzTimer = setInterval(() => {
+        if (launched) return;
+        vibrate(pattern[Math.min(step, pattern.length - 1)]);
+        step++;
+      }, 170);
+    }
+
+    function stopPreLaunchBuzz() {
+      clearInterval(preLaunchBuzzTimer);
+      preLaunchBuzzTimer = null;
+    }
 
     function getStageByClicks(value) {
       if (value <= 2) return 1;
@@ -653,69 +743,27 @@
     }
 
     function setStage(stage) {
-      smileyBtn.classList.remove("stage-1", "stage-2", "stage-3", "stage-4", "stage-5");
-      smileyBtn.classList.add(`stage-${stage}`);
-      updateMouth(stage);
-    }
-
-    function updateMouth(stage) {
-      if (stage === 1) {
-        mouthPath.setAttribute("d", "M20 28 Q50 48 80 28");
-        mouthPath.setAttribute("stroke", "#6a2500");
-        mouthPath.setAttribute("stroke-width", "6");
-        mouthPath.setAttribute("fill", "none");
-        tonguePath.style.opacity = "0";
-      }
-
-      if (stage === 2) {
-        mouthPath.setAttribute("d", "M24 34 Q50 40 76 34");
-        mouthPath.setAttribute("stroke", "#642100");
-        mouthPath.setAttribute("stroke-width", "5");
-        mouthPath.setAttribute("fill", "none");
-        tonguePath.style.opacity = "0";
-      }
-
-      if (stage === 3) {
-        mouthPath.setAttribute("d", "M24 40 Q50 30 76 40");
-        mouthPath.setAttribute("stroke", "#5f1b00");
-        mouthPath.setAttribute("stroke-width", "5");
-        mouthPath.setAttribute("fill", "none");
-        tonguePath.style.opacity = "0";
-      }
-
-      if (stage === 4) {
-        mouthPath.setAttribute("d", "M18 46 Q50 18 82 46");
-        mouthPath.setAttribute("stroke", "#5a1400");
-        mouthPath.setAttribute("stroke-width", "6");
-        mouthPath.setAttribute("fill", "none");
-        tonguePath.style.opacity = "0";
-      }
-
-      if (stage === 5) {
-        mouthPath.setAttribute("d", "M24 22 Q50 10 76 22 Q78 42 70 52 Q50 59 30 52 Q22 42 24 22 Z");
-        mouthPath.setAttribute("stroke", "#641000");
-        mouthPath.setAttribute("stroke-width", "4");
-        mouthPath.setAttribute("fill", "#4e0000");
-        tonguePath.style.opacity = "1";
-      }
+      rocketBtn.classList.remove("stage-1", "stage-2", "stage-3", "stage-4", "stage-5");
+      rocketBtn.classList.add(`stage-${stage}`);
     }
 
     function updateVisualState() {
-      const scale = 1 + clicks * 0.075;
-      smileyBtn.style.setProperty("--scale", scale.toFixed(2));
-      smileyBtn.style.transform = `scale(${scale})`;
+      const scale = 1 + clicks * 0.05;
+      rocketBtn.style.setProperty("--scale", scale.toFixed(2));
+      rocketBtn.style.transform = `scale(${scale})`;
 
-      smileyBtn.classList.remove("yellow", "orange", "red", "shake");
+      rocketBtn.classList.remove("shake");
+      setStage(getStageByClicks(clicks));
 
-      if (clicks >= 3) smileyBtn.classList.add("yellow");
-      if (clicks >= 6) smileyBtn.classList.add("orange");
-      if (clicks >= 8) {
-        smileyBtn.classList.add("red");
-        smileyBtn.classList.add("shake");
+      if (clicks >= 7) {
+        rocketBtn.classList.add("shake");
       }
 
-      setStage(getStageByClicks(clicks));
-      counter.textContent = `Нажатий: ${clicks}`;
+      if (clicks === 7) {
+        startPreLaunchBuzz();
+      }
+
+      counter.textContent = `Тапов: ${clicks}`;
     }
 
     function createFlash() {
@@ -727,20 +775,20 @@
 
     function createParticles() {
       const colors = [
-        "#fff2b7", "#ffd24a", "#ffae00", "#ff7a00",
-        "#ff4d4d", "#ff6b6b", "#ffe5a6", "#ffffff"
+        "#ffffff", "#ffeaa6", "#ffd24a", "#ffb000",
+        "#ff7a00", "#ff6b6b", "#8cd8ff", "#c9f4ff"
       ];
 
-      for (let i = 0; i < 38; i++) {
+      for (let i = 0; i < 36; i++) {
         const p = document.createElement("div");
         p.className = "particle";
 
-        const angle = (Math.PI * 2 * i) / 38 + (Math.random() * 0.38);
-        const distance = 92 + Math.random() * 138;
+        const angle = (Math.PI * 2 * i) / 36 + (Math.random() * 0.4);
+        const distance = 88 + Math.random() * 135;
         const x = Math.cos(angle) * distance;
         const y = Math.sin(angle) * distance;
 
-        const size = 7 + Math.random() * 15;
+        const size = 7 + Math.random() * 14;
         const color = colors[Math.floor(Math.random() * colors.length)];
 
         p.style.setProperty("--x", `${x}px`);
@@ -753,13 +801,9 @@
         p.style.color = color;
 
         const shape = Math.random();
-        if (shape > 0.66) {
-          p.style.borderRadius = "3px";
-        } else if (shape > 0.33) {
-          p.style.borderRadius = "50% 20% 50% 20%";
-        } else {
-          p.style.borderRadius = "50%";
-        }
+        if (shape > 0.66) p.style.borderRadius = "3px";
+        else if (shape > 0.33) p.style.borderRadius = "50% 20% 50% 20%";
+        else p.style.borderRadius = "50%";
 
         arena.appendChild(p);
         setTimeout(() => p.remove(), 1050);
@@ -768,17 +812,6 @@
 
     function getRandomInt(min, max) {
       return Math.floor(Math.random() * (max - min + 1)) + min;
-    }
-
-    function vibrate(type) {
-      try {
-        if (window.Telegram && Telegram.WebApp && Telegram.WebApp.HapticFeedback) {
-          if (type === "light") Telegram.WebApp.HapticFeedback.impactOccurred("light");
-          if (type === "medium") Telegram.WebApp.HapticFeedback.impactOccurred("medium");
-          if (type === "heavy") Telegram.WebApp.HapticFeedback.impactOccurred("heavy");
-          if (type === "success") Telegram.WebApp.HapticFeedback.notificationOccurred("success");
-        }
-      } catch (e) {}
     }
 
     function rollResult(finalValue) {
@@ -799,10 +832,13 @@
       }, 55);
     }
 
-    function explodeSmiley() {
-      exploded = true;
-      smileyBtn.classList.remove("pulse", "shake");
-      smileyBtn.classList.add("boom-hidden");
+    function launchRocket() {
+      launched = true;
+      stopPreLaunchBuzz();
+
+      rocketBtn.classList.remove("pulse", "shake");
+      rocketBtn.classList.add("launching");
+      launchTrail.classList.add("show");
 
       createFlash();
       createParticles();
@@ -812,52 +848,59 @@
 
       setTimeout(() => {
         rollResult(randomValue);
-      }, 120);
+      }, 760);
 
-      counter.textContent = "Бах. Смайлик не выдержал.";
+      counter.textContent = "Пуск. Ракета улетела.";
       againBtn.classList.add("show");
+
+      setTimeout(() => {
+        launchTrail.classList.remove("show");
+      }, 1200);
     }
 
-    function pressSmiley(event) {
+    function pressRocket(event) {
       event.preventDefault();
-      if (exploded) return;
+      if (launched) return;
 
       clicks += 1;
       updateVisualState();
 
-      if (clicks >= 7) vibrate("light");
-      if (clicks >= 9) vibrate("medium");
+      if (clicks >= 5 && clicks < 7) vibrate("light");
+      if (clicks >= 7 && clicks < 9) vibrate("medium");
+      if (clicks >= 9) vibrate("warning");
 
       if (clicks >= 10) {
-        explodeSmiley();
+        launchRocket();
       }
     }
 
-    smileyBtn.addEventListener("pointerdown", pressSmiley, { passive: false });
-    smileyBtn.addEventListener("click", (event) => {
+    rocketBtn.addEventListener("pointerdown", pressRocket, { passive: false });
+    rocketBtn.addEventListener("click", (event) => {
       event.preventDefault();
     }, { passive: false });
 
     againBtn.addEventListener("click", () => {
       clearInterval(rollingTimer);
+      stopPreLaunchBuzz();
 
       clicks = 0;
-      exploded = false;
+      launched = false;
 
-      smileyBtn.className = "smiley-btn pulse stage-1";
-      smileyBtn.style.transform = "scale(1)";
-      smileyBtn.style.removeProperty("--scale");
+      rocketBtn.className = "rocket-btn pulse stage-1";
+      rocketBtn.style.transform = "scale(1)";
+      rocketBtn.style.removeProperty("--scale");
 
       centerResult.classList.remove("show");
       resultNumber.textContent = "0";
+      launchTrail.classList.remove("show");
 
-      counter.textContent = "Нажатий: 0";
+      counter.textContent = "Тапов: 0";
       againBtn.classList.remove("show");
-
-      updateMouth(1);
+      setStage(1);
     });
 
-    updateMouth(1);
+    createStars();
+    setStage(1);
   </script>
 </body>
 </html>

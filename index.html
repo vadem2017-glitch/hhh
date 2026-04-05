@@ -143,7 +143,7 @@
     .arena {
       position: relative;
       flex: 1 1 auto;
-      min-height: 280px;
+      min-height: 300px;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -154,7 +154,7 @@
     .tap-zone {
       position: relative;
       width: min(80vw, 290px);
-      height: min(84vw, 320px);
+      height: min(86vw, 340px);
       display: flex;
       align-items: center;
       justify-content: center;
@@ -185,15 +185,9 @@
     }
 
     @keyframes rocketPulse {
-      0% {
-        filter: drop-shadow(0 0 0 rgba(95,190,255,0.00));
-      }
-      50% {
-        filter: drop-shadow(0 0 18px rgba(95,190,255,0.18));
-      }
-      100% {
-        filter: drop-shadow(0 0 0 rgba(95,190,255,0.00));
-      }
+      0% { filter: drop-shadow(0 0 0 rgba(95,190,255,0)); }
+      50% { filter: drop-shadow(0 0 18px rgba(95,190,255,0.18)); }
+      100% { filter: drop-shadow(0 0 0 rgba(95,190,255,0)); }
     }
 
     .rocket-btn.shake {
@@ -210,7 +204,7 @@
     }
 
     .rocket-btn.launching {
-      animation: launchRocket 1.3s cubic-bezier(.18,.72,.24,1) forwards;
+      animation: launchRocket 2.35s cubic-bezier(.17,.72,.22,1) forwards;
       pointer-events: none;
     }
 
@@ -219,11 +213,17 @@
         transform: translateY(0) scale(var(--scale, 1));
         opacity: 1;
       }
-      10% {
-        transform: translateY(-8px) scale(calc(var(--scale, 1) * 1.02));
+      8% {
+        transform: translateY(-4px) scale(calc(var(--scale, 1) * 1.01));
+      }
+      18% {
+        transform: translateY(10px) scale(calc(var(--scale, 1) * 1.02));
+      }
+      34% {
+        transform: translateY(-18px) scale(calc(var(--scale, 1) * 1.03));
       }
       100% {
-        transform: translateY(-165vh) scale(calc(var(--scale, 1) * 0.88));
+        transform: translateY(-185vh) scale(calc(var(--scale, 1) * 0.9));
         opacity: 0;
       }
     }
@@ -243,9 +243,9 @@
       transition: fill 0.25s ease;
     }
 
-    .hull-shadow,
     .window-glow,
     .flame-core,
+    .flame-mid,
     .flame-outer,
     .booster-light,
     .smoke {
@@ -278,105 +278,191 @@
     .rocket-btn.stage-5 .booster-light { opacity: 1; }
 
     .rocket-btn .flame-outer,
+    .rocket-btn .flame-mid,
     .rocket-btn .flame-core,
     .rocket-btn .smoke {
       opacity: 0;
       transform-origin: 50% 0%;
     }
 
-    .rocket-btn.stage-2 .flame-outer { opacity: 0.35; }
-    .rocket-btn.stage-2 .flame-core { opacity: 0.22; }
+    .rocket-btn.stage-2 .flame-outer { opacity: 0.22; }
+    .rocket-btn.stage-2 .flame-mid { opacity: 0.15; }
+    .rocket-btn.stage-2 .flame-core { opacity: 0.10; }
 
-    .rocket-btn.stage-3 .flame-outer { opacity: 0.55; }
-    .rocket-btn.stage-3 .flame-core { opacity: 0.42; }
+    .rocket-btn.stage-3 .flame-outer { opacity: 0.42; }
+    .rocket-btn.stage-3 .flame-mid { opacity: 0.30; }
+    .rocket-btn.stage-3 .flame-core { opacity: 0.22; }
 
     .rocket-btn.stage-4 .flame-outer,
+    .rocket-btn.stage-4 .flame-mid,
     .rocket-btn.stage-4 .flame-core,
     .rocket-btn.stage-4 .smoke {
-      opacity: 0.78;
+      opacity: 0.75;
     }
 
     .rocket-btn.stage-5 .flame-outer,
+    .rocket-btn.stage-5 .flame-mid,
     .rocket-btn.stage-5 .flame-core,
     .rocket-btn.stage-5 .smoke {
       opacity: 1;
     }
 
     .rocket-btn.stage-4 .flame-outer,
+    .rocket-btn.stage-5 .flame-outer {
+      animation: flameOuter 0.16s ease-in-out infinite alternate;
+    }
+
+    .rocket-btn.stage-4 .flame-mid,
+    .rocket-btn.stage-5 .flame-mid {
+      animation: flameMid 0.12s ease-in-out infinite alternate;
+    }
+
     .rocket-btn.stage-4 .flame-core,
-    .rocket-btn.stage-5 .flame-outer,
     .rocket-btn.stage-5 .flame-core {
-      animation: flameFlicker 0.12s ease-in-out infinite alternate;
+      animation: flameCore 0.10s ease-in-out infinite alternate;
     }
 
     .rocket-btn.stage-4 .smoke,
     .rocket-btn.stage-5 .smoke {
-      animation: smokePulse 0.35s ease-in-out infinite alternate;
+      animation: smokePulse 0.40s ease-in-out infinite alternate;
     }
 
-    @keyframes flameFlicker {
-      0% { transform: scaleY(0.92) translateY(0); }
-      100% { transform: scaleY(1.12) translateY(3px); }
+    @keyframes flameOuter {
+      0% { transform: scaleY(0.90) translateY(0); opacity: 0.78; }
+      100% { transform: scaleY(1.18) translateY(6px); opacity: 1; }
+    }
+
+    @keyframes flameMid {
+      0% { transform: scaleY(0.94) translateY(0); opacity: 0.82; }
+      100% { transform: scaleY(1.14) translateY(4px); opacity: 1; }
+    }
+
+    @keyframes flameCore {
+      0% { transform: scaleY(0.96) translateY(0); opacity: 0.84; }
+      100% { transform: scaleY(1.08) translateY(2px); opacity: 1; }
     }
 
     @keyframes smokePulse {
-      0% { transform: translateY(0) scale(0.96); opacity: 0.72; }
-      100% { transform: translateY(6px) scale(1.06); opacity: 1; }
+      0% { transform: translateY(0) scale(0.95); opacity: 0.62; }
+      100% { transform: translateY(8px) scale(1.10); opacity: 1; }
     }
 
-    .launch-trail {
+    .launch-plume {
       position: absolute;
       left: 50%;
-      bottom: 16%;
-      width: 54px;
-      height: 180px;
-      transform: translateX(-50%);
-      opacity: 0;
+      top: 56%;
+      width: min(72vw, 260px);
+      height: 240px;
+      transform: translate(-50%, -50%);
       pointer-events: none;
-      z-index: 2;
+      opacity: 0;
+      z-index: 3;
     }
 
-    .launch-trail.show {
+    .launch-plume.show {
       opacity: 1;
-      animation: trailGrow 1.15s ease-out forwards;
     }
 
-    @keyframes trailGrow {
+    .plume-flame {
+      position: absolute;
+      left: 50%;
+      top: 6px;
+      width: 54px;
+      height: 122px;
+      transform: translateX(-50%);
+      background:
+        radial-gradient(circle at 50% 5%, rgba(255,255,255,0.95) 0%, rgba(255,243,170,0.95) 18%, rgba(255,180,0,0.95) 48%, rgba(255,91,0,0.95) 76%, transparent 100%);
+      filter: blur(3px);
+      border-radius: 50% 50% 60% 60%;
+      animation: plumeFlame 0.14s ease-in-out infinite alternate;
+    }
+
+    @keyframes plumeFlame {
+      0% { transform: translateX(-50%) scaleY(0.92); }
+      100% { transform: translateX(-50%) scaleY(1.14); }
+    }
+
+    .plume-smoke {
+      position: absolute;
+      inset: 42px 0 0 0;
+      pointer-events: none;
+    }
+
+    .smoke-cloud {
+      position: absolute;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(245,248,255,0.72) 0%, rgba(190,205,225,0.28) 52%, rgba(180,190,210,0.02) 100%);
+      filter: blur(8px);
+      animation: cloudRise 2.4s ease-out forwards;
+      opacity: 0;
+    }
+
+    @keyframes cloudRise {
       0% {
-        opacity: 0.1;
-        transform: translateX(-50%) scaleY(0.2);
+        transform: translateY(18px) scale(0.65);
+        opacity: 0;
       }
-      18% {
-        opacity: 1;
+      20% {
+        opacity: 0.95;
+      }
+      70% {
+        opacity: 0.82;
       }
       100% {
+        transform: translateY(-24px) scale(1.12);
         opacity: 0;
-        transform: translateX(-50%) translateY(48px) scaleY(1.35);
       }
     }
 
-    .trail-flame {
+    .smoke-result {
       position: absolute;
-      left: 50%;
-      top: 0;
-      width: 32px;
-      height: 80px;
-      transform: translateX(-50%);
-      background: radial-gradient(circle at 50% 0%, #fff4b3 0%, #ffb300 46%, #ff5a00 75%, transparent 100%);
-      filter: blur(3px);
-      border-radius: 50% 50% 55% 55%;
+      inset: 50% auto auto 50%;
+      transform: translate(-50%, -50%) scale(0.90);
+      width: min(74vw, 240px);
+      height: 140px;
+      pointer-events: none;
+      opacity: 0;
+      z-index: 6;
+      transition: opacity 0.28s ease, transform 0.28s ease;
     }
 
-    .trail-smoke {
+    .smoke-result.show {
+      opacity: 1;
+      transform: translate(-50%, -50%) scale(1);
+    }
+
+    .smoke-result .smoke-backdrop {
+      position: absolute;
+      inset: 0;
+      border-radius: 24px;
+      background:
+        radial-gradient(circle at 50% 36%, rgba(245,248,255,0.26) 0%, rgba(220,230,245,0.14) 26%, rgba(150,165,185,0.05) 54%, transparent 78%);
+      filter: blur(3px);
+    }
+
+    .smoke-result .number-layer {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: clamp(48px, 14vw, 68px);
+      font-weight: 800;
+      letter-spacing: -0.06em;
+      color: rgba(255,255,255,0.97);
+      text-shadow:
+        0 0 26px rgba(255,255,255,0.24),
+        0 0 40px rgba(185,220,255,0.18);
+    }
+
+    .smoke-result .result-caption {
       position: absolute;
       left: 50%;
-      bottom: 0;
-      width: 54px;
-      height: 120px;
+      bottom: 2px;
       transform: translateX(-50%);
-      background: radial-gradient(circle at 50% 20%, rgba(255,255,255,0.55) 0%, rgba(225,235,255,0.18) 45%, transparent 70%);
-      filter: blur(10px);
-      border-radius: 50%;
+      font-size: 12px;
+      color: rgba(255,255,255,0.58);
+      white-space: nowrap;
     }
 
     .counter {
@@ -390,51 +476,6 @@
       margin-top: -2px;
       font-size: 13px;
       color: var(--text-dim);
-    }
-
-    .center-result {
-      position: absolute;
-      inset: 50% auto auto 50%;
-      transform: translate(-50%, -50%) scale(0.88);
-      width: min(74vw, 240px);
-      padding: 16px 16px 14px;
-      border-radius: 22px;
-      background: rgba(255,255,255,0.08);
-      border: 1px solid rgba(255,255,255,0.10);
-      box-shadow:
-        0 20px 40px rgba(0,0,0,0.30),
-        inset 0 1px 0 rgba(255,255,255,0.06);
-      backdrop-filter: blur(16px);
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 0.28s ease, transform 0.28s ease;
-      z-index: 6;
-    }
-
-    .center-result.show {
-      opacity: 1;
-      transform: translate(-50%, -50%) scale(1);
-    }
-
-    .center-result-label {
-      font-size: 13px;
-      color: rgba(255,255,255,0.68);
-      margin-bottom: 8px;
-    }
-
-    .center-result-number {
-      font-size: clamp(42px, 12vw, 58px);
-      font-weight: 800;
-      letter-spacing: -0.06em;
-      line-height: 1;
-      color: #fff;
-      text-shadow: 0 0 24px rgba(255,255,255,0.18);
-    }
-
-    .center-result-sub {
-      margin-top: 8px;
-      font-size: 12px;
-      color: rgba(255,255,255,0.56);
     }
 
     .again-btn {
@@ -522,7 +563,7 @@
       }
 
       .arena {
-        min-height: 236px;
+        min-height: 244px;
       }
 
       .badge {
@@ -539,14 +580,14 @@
 
     @media (max-height: 760px) {
       .app { gap: 7px; }
-      .arena { min-height: 205px; }
+      .arena { min-height: 215px; }
       .sub { font-size: 14px; }
     }
 
     @media (max-height: 680px) {
       :root { --rocket-size: 138px; }
 
-      .arena { min-height: 182px; }
+      .arena { min-height: 190px; }
 
       h1 { font-size: 26px; }
 
@@ -556,9 +597,7 @@
       }
 
       .counter,
-      .hint,
-      .center-result-label,
-      .center-result-sub {
+      .hint {
         font-size: 12px;
       }
     }
@@ -572,7 +611,7 @@
     <div class="badge">Telegram Mini App Test</div>
     <h1>Ракета</h1>
     <div class="sub">
-      Тапай по ракете. Двигатель начнёт запускаться, телефон будет пульсировать, потом ракета взлетит, а на её месте появится случайный результат.
+      Тапай по ракете. Двигатель разогреется, ракета взлетит медленнее и красивее, а из дымного шлейфа соберётся результат.
     </div>
 
     <div class="arena" id="arena">
@@ -592,39 +631,31 @@
                 <stop offset="0%" stop-color="#4da2ff"/>
                 <stop offset="100%" stop-color="#2457ff"/>
               </linearGradient>
-              <linearGradient id="flameGradient" x1="0" x2="0" y1="0" y2="1">
-                <stop offset="0%" stop-color="#fff6b1"/>
-                <stop offset="45%" stop-color="#ffb300"/>
-                <stop offset="100%" stop-color="#ff4f00"/>
+              <linearGradient id="flameGradientOuter" x1="0" x2="0" y1="0" y2="1">
+                <stop offset="0%" stop-color="#fff0a5"/>
+                <stop offset="35%" stop-color="#ffbe1b"/>
+                <stop offset="70%" stop-color="#ff7a00"/>
+                <stop offset="100%" stop-color="#ff4100"/>
               </linearGradient>
-              <linearGradient id="flameCoreGradient" x1="0" x2="0" y1="0" y2="1">
+              <linearGradient id="flameGradientMid" x1="0" x2="0" y1="0" y2="1">
+                <stop offset="0%" stop-color="#fff7d6"/>
+                <stop offset="55%" stop-color="#ffd04d"/>
+                <stop offset="100%" stop-color="#ff7b12"/>
+              </linearGradient>
+              <linearGradient id="flameGradientCore" x1="0" x2="0" y1="0" y2="1">
                 <stop offset="0%" stop-color="#ffffff"/>
-                <stop offset="100%" stop-color="#ffd866"/>
+                <stop offset="100%" stop-color="#ffe687"/>
               </linearGradient>
             </defs>
 
             <g class="rocket-body">
-              <path class="fin-left" d="M62 170 C34 184, 20 212, 22 244 C45 233, 60 214, 70 188 Z" fill="url(#finGradient)"/>
-              <path class="fin-right" d="M158 170 C186 184, 200 212, 198 244 C175 233, 160 214, 150 188 Z" fill="url(#finGradient)"/>
-              <rect class="tail-base" x="88" y="198" width="44" height="34" rx="14" fill="#7a8cff"/>
+              <path d="M62 170 C34 184, 20 212, 22 244 C45 233, 60 214, 70 188 Z" fill="url(#finGradient)"/>
+              <path d="M158 170 C186 184, 200 212, 198 244 C175 233, 160 214, 150 188 Z" fill="url(#finGradient)"/>
+              <rect x="88" y="198" width="44" height="34" rx="14" fill="#7a8cff"/>
 
-              <path class="hull-main" d="M110 20
-                C88 36, 68 74, 64 120
-                L64 190
-                C64 216, 84 236, 110 236
-                C136 236, 156 216, 156 190
-                L156 120
-                C152 74, 132 36, 110 20 Z" fill="url(#hullGradient)"/>
-
-              <path class="hull-shadow" d="M110 20
-                C127 36, 145 74, 149 120
-                L149 190
-                C149 208, 137 225, 120 232
-                C144 230, 156 211, 156 190
-                L156 120
-                C152 74, 132 36, 110 20 Z" fill="rgba(120,150,255,0.14)"/>
-
-              <path class="nose" d="M110 20 C99 28, 90 42, 84 58 C99 51, 121 51, 136 58 C130 42, 121 28, 110 20 Z" fill="url(#noseGradient)"/>
+              <path class="hull-main" d="M110 20 C88 36, 68 74, 64 120 L64 190 C64 216, 84 236, 110 236 C136 236, 156 216, 156 190 L156 120 C152 74, 132 36, 110 20 Z" fill="url(#hullGradient)"/>
+              <path d="M110 20 C127 36, 145 74, 149 120 L149 190 C149 208, 137 225, 120 232 C144 230, 156 211, 156 190 L156 120 C152 74, 132 36, 110 20 Z" fill="rgba(120,150,255,0.14)"/>
+              <path d="M110 20 C99 28, 90 42, 84 58 C99 51, 121 51, 136 58 C130 42, 121 28, 110 20 Z" fill="url(#noseGradient)"/>
 
               <circle cx="110" cy="105" r="26" fill="#1b4d8f"/>
               <circle cx="110" cy="105" r="18" fill="#91ecff"/>
@@ -636,38 +667,29 @@
             </g>
 
             <g class="engine">
-              <ellipse class="smoke" cx="110" cy="252" rx="34" ry="18" fill="rgba(220,230,255,0.38)"/>
-              <path class="flame-outer" d="M110 228
-                C97 244, 88 266, 94 284
-                C100 278, 106 270, 110 300
-                C114 270, 120 278, 126 284
-                C132 266, 123 244, 110 228 Z"
-                fill="url(#flameGradient)"/>
-              <path class="flame-core" d="M110 236
-                C102 248, 100 264, 104 276
-                C108 270, 110 264, 110 286
-                C110 264, 112 270, 116 276
-                C120 264, 118 248, 110 236 Z"
-                fill="url(#flameCoreGradient)"/>
+              <ellipse class="smoke" cx="110" cy="250" rx="36" ry="19" fill="rgba(220,230,255,0.34)"/>
+              <path class="flame-outer" d="M110 228 C95 244, 84 270, 92 292 C100 284, 106 278, 110 300 C114 278, 120 284, 128 292 C136 270, 125 244, 110 228 Z" fill="url(#flameGradientOuter)"/>
+              <path class="flame-mid" d="M110 234 C100 248, 95 268, 100 286 C106 278, 109 272, 110 292 C111 272, 114 278, 120 286 C125 268, 120 248, 110 234 Z" fill="url(#flameGradientMid)"/>
+              <path class="flame-core" d="M110 240 C104 252, 103 266, 106 278 C109 272, 110 268, 110 286 C110 268, 111 272, 114 278 C117 266, 116 252, 110 240 Z" fill="url(#flameGradientCore)"/>
             </g>
           </svg>
         </button>
 
-        <div class="launch-trail" id="launchTrail">
-          <div class="trail-flame"></div>
-          <div class="trail-smoke"></div>
+        <div class="launch-plume" id="launchPlume">
+          <div class="plume-flame"></div>
+          <div class="plume-smoke" id="plumeSmoke"></div>
         </div>
 
-        <div class="center-result" id="centerResult">
-          <div class="center-result-label">Твой случайный результат</div>
-          <div class="center-result-number" id="resultNumber">0</div>
-          <div class="center-result-sub">Число выпало после старта</div>
+        <div class="smoke-result" id="smokeResult">
+          <div class="smoke-backdrop"></div>
+          <div class="number-layer" id="resultNumber">0</div>
+          <div class="result-caption">Результат собрался из дыма</div>
         </div>
       </div>
     </div>
 
     <div class="counter" id="counter">Тапов: 0</div>
-    <div class="hint">На 10-м тапе — запуск ракеты и случайное число.</div>
+    <div class="hint">На 10-м тапе — запуск, дым и число.</div>
 
     <button class="again-btn" id="againBtn">Ещё раз</button>
   </div>
@@ -683,9 +705,10 @@
     const againBtn = document.getElementById("againBtn");
     const counter = document.getElementById("counter");
     const arena = document.getElementById("arena");
-    const centerResult = document.getElementById("centerResult");
+    const smokeResult = document.getElementById("smokeResult");
     const resultNumber = document.getElementById("resultNumber");
-    const launchTrail = document.getElementById("launchTrail");
+    const launchPlume = document.getElementById("launchPlume");
+    const plumeSmoke = document.getElementById("plumeSmoke");
 
     let clicks = 0;
     let launched = false;
@@ -718,15 +741,14 @@
 
     function startPreLaunchBuzz() {
       stopPreLaunchBuzz();
-
       let step = 0;
-      const pattern = ["light", "light", "medium", "light", "medium", "medium"];
+      const pattern = ["light", "light", "medium", "light", "medium", "medium", "warning"];
 
       preLaunchBuzzTimer = setInterval(() => {
         if (launched) return;
         vibrate(pattern[Math.min(step, pattern.length - 1)]);
         step++;
-      }, 170);
+      }, 220);
     }
 
     function stopPreLaunchBuzz() {
@@ -810,14 +832,38 @@
       }
     }
 
+    function buildSmokeClouds() {
+      plumeSmoke.innerHTML = "";
+
+      const clouds = [
+        { x: 50, y: 32, w: 84, h: 84, d: 0 },
+        { x: 34, y: 58, w: 72, h: 72, d: 120 },
+        { x: 66, y: 60, w: 76, h: 76, d: 200 },
+        { x: 24, y: 92, w: 64, h: 64, d: 320 },
+        { x: 76, y: 96, w: 68, h: 68, d: 420 },
+        { x: 50, y: 112, w: 100, h: 82, d: 520 }
+      ];
+
+      clouds.forEach((c) => {
+        const el = document.createElement("div");
+        el.className = "smoke-cloud";
+        el.style.left = `calc(${c.x}% - ${c.w / 2}px)`;
+        el.style.top = `${c.y}px`;
+        el.style.width = `${c.w}px`;
+        el.style.height = `${c.h}px`;
+        el.style.animationDelay = `${c.d}ms`;
+        plumeSmoke.appendChild(el);
+      });
+    }
+
     function getRandomInt(min, max) {
       return Math.floor(Math.random() * (max - min + 1)) + min;
     }
 
     function rollResult(finalValue) {
-      centerResult.classList.add("show");
+      smokeResult.classList.add("show");
 
-      let steps = 16;
+      let steps = 18;
       clearInterval(rollingTimer);
 
       rollingTimer = setInterval(() => {
@@ -829,7 +875,7 @@
           resultNumber.textContent = finalValue;
           vibrate("success");
         }
-      }, 55);
+      }, 65);
     }
 
     function launchRocket() {
@@ -838,7 +884,9 @@
 
       rocketBtn.classList.remove("pulse", "shake");
       rocketBtn.classList.add("launching");
-      launchTrail.classList.add("show");
+
+      buildSmokeClouds();
+      launchPlume.classList.add("show");
 
       createFlash();
       createParticles();
@@ -848,14 +896,14 @@
 
       setTimeout(() => {
         rollResult(randomValue);
-      }, 760);
+      }, 1450);
 
-      counter.textContent = "Пуск. Ракета улетела.";
+      counter.textContent = "Пуск. Ракета ушла в небо.";
       againBtn.classList.add("show");
 
       setTimeout(() => {
-        launchTrail.classList.remove("show");
-      }, 1200);
+        launchPlume.classList.remove("show");
+      }, 2600);
     }
 
     function pressRocket(event) {
@@ -890,9 +938,10 @@
       rocketBtn.style.transform = "scale(1)";
       rocketBtn.style.removeProperty("--scale");
 
-      centerResult.classList.remove("show");
+      smokeResult.classList.remove("show");
       resultNumber.textContent = "0";
-      launchTrail.classList.remove("show");
+      launchPlume.classList.remove("show");
+      plumeSmoke.innerHTML = "";
 
       counter.textContent = "Тапов: 0";
       againBtn.classList.remove("show");

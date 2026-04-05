@@ -13,7 +13,7 @@
       --safe-top: env(safe-area-inset-top, 0px);
       --safe-bottom: env(safe-area-inset-bottom, 0px);
       --card-w: min(92vw, 420px);
-      --face-size: clamp(140px, 32vw, 190px);
+      --face-size: clamp(138px, 34vw, 198px);
       --text-main: rgba(255,255,255,0.96);
       --text-soft: rgba(255,255,255,0.72);
       --text-dim: rgba(255,255,255,0.48);
@@ -53,7 +53,6 @@
 
     .bg-glow {
       position: fixed;
-      inset: auto;
       width: 440px;
       height: 440px;
       border-radius: 50%;
@@ -85,7 +84,6 @@
         inset 0 1px 0 rgba(255,255,255,0.05);
       display: flex;
       flex-direction: column;
-      justify-content: flex-start;
       gap: 10px;
     }
 
@@ -110,7 +108,7 @@
 
     .sub {
       margin: 0 auto;
-      max-width: 320px;
+      max-width: 330px;
       font-size: clamp(14px, 3.6vw, 16px);
       line-height: 1.42;
       color: var(--text-soft);
@@ -124,13 +122,13 @@
       align-items: center;
       justify-content: center;
       overflow: visible;
-      padding: 2px 0;
+      padding: 4px 0;
     }
 
     .tap-zone {
       position: relative;
-      width: min(72vw, 260px);
-      height: min(72vw, 260px);
+      width: min(76vw, 280px);
+      height: min(76vw, 280px);
       display: flex;
       align-items: center;
       justify-content: center;
@@ -138,7 +136,7 @@
     }
 
     .smiley-btn {
-      position: relative;
+      position: absolute;
       width: var(--face-size);
       height: var(--face-size);
       padding: 0;
@@ -153,6 +151,7 @@
         filter 0.25s ease;
       will-change: transform;
       touch-action: manipulation;
+      z-index: 3;
     }
 
     .smiley-btn.pulse .face-core {
@@ -195,7 +194,7 @@
 
     .smiley-btn.boom-hidden {
       opacity: 0;
-      transform: scale(0.45);
+      transform: scale(0.42);
       pointer-events: none;
     }
 
@@ -218,10 +217,6 @@
       background:
         radial-gradient(circle at 35% 24%, rgba(255,255,255,0.24), rgba(255,255,255,0.06) 24%, transparent 28%),
         linear-gradient(180deg, #ffd95d 0%, #ffb000 58%, #f77b00 100%);
-      box-shadow:
-        0 0 0 0 rgba(255,180,0,0.22),
-        0 16px 30px rgba(0,0,0,0.30),
-        inset 0 10px 20px rgba(255,255,255,0.16);
     }
 
     .smiley-btn.orange .face-core {
@@ -285,43 +280,26 @@
     .brow.left { left: 22%; transform: rotate(0deg); }
     .brow.right { right: 22%; transform: rotate(0deg); }
 
-    .mouth {
+    .mouth-svg {
       position: absolute;
       left: 50%;
-      top: 59%;
-      width: 34%;
-      height: 14%;
+      top: 58%;
+      width: 38%;
+      height: 20%;
       transform: translateX(-50%);
-      border-bottom: 6px solid #6c2200;
-      border-radius: 0 0 60px 60px;
-      transition: all 0.22s ease;
+      overflow: visible;
+      transition: top 0.22s ease, width 0.22s ease, height 0.22s ease;
     }
 
-    .mouth::before,
-    .mouth::after {
-      content: "";
-      position: absolute;
-      bottom: -6px;
-      width: 12px;
-      height: 6px;
-      background: transparent;
-      border-bottom: 6px solid #6c2200;
-      transition: all 0.22s ease;
+    .mouth-path {
+      transition: d 0.22s ease;
     }
 
-    .mouth::before {
-      left: -1px;
-      border-radius: 0 0 0 10px;
-      transform: rotate(10deg);
+    .tongue-svg {
+      opacity: 0;
+      transition: opacity 0.18s ease;
     }
 
-    .mouth::after {
-      right: -1px;
-      border-radius: 0 0 10px 0;
-      transform: rotate(-10deg);
-    }
-
-    /* Стадии лица */
     .stage-1 .brow,
     .stage-2 .brow {
       opacity: 0;
@@ -334,22 +312,6 @@
       height: 18%;
       border-radius: 50%;
       transform: rotate(0deg);
-    }
-
-    .stage-1 .mouth {
-      top: 58%;
-      width: 34%;
-      height: 14%;
-      border-bottom-width: 6px;
-      border-radius: 0 0 60px 60px;
-    }
-
-    .stage-2 .mouth {
-      top: 60%;
-      width: 28%;
-      height: 9%;
-      border-bottom-width: 5px;
-      border-radius: 0 0 30px 30px;
     }
 
     .stage-3 .brow {
@@ -369,14 +331,6 @@
       border-radius: 40% 40% 50% 50%;
     }
 
-    .stage-3 .mouth {
-      top: 62%;
-      width: 26%;
-      height: 8%;
-      border-bottom-width: 5px;
-      border-radius: 0 0 24px 24px;
-    }
-
     .stage-4 .brow,
     .stage-5 .brow {
       opacity: 1;
@@ -388,7 +342,6 @@
 
     .stage-4 .brow.left { transform: rotate(26deg); }
     .stage-4 .brow.right { transform: rotate(-26deg); }
-
     .stage-5 .brow.left { transform: rotate(34deg); }
     .stage-5 .brow.right { transform: rotate(-34deg); }
 
@@ -397,7 +350,6 @@
       width: 15%;
       height: 8%;
       border-radius: 999px;
-      transform: rotate(-6deg);
     }
 
     .stage-5 .eye {
@@ -418,49 +370,6 @@
       opacity: 0;
     }
 
-    .stage-4 .mouth {
-      top: 62%;
-      width: 34%;
-      height: 15%;
-      border-bottom: none;
-      border-top: 6px solid #610f00;
-      border-radius: 32px 32px 0 0;
-    }
-
-    .stage-4 .mouth::before,
-    .stage-4 .mouth::after {
-      bottom: auto;
-      top: -6px;
-      border-bottom: none;
-      border-top: 6px solid #610f00;
-    }
-
-    .stage-5 .mouth {
-      top: 59%;
-      width: 36%;
-      height: 19%;
-      background: linear-gradient(180deg, #3a0000 0%, #6d0000 100%);
-      border: 5px solid #5f0d00;
-      border-radius: 18px 18px 34px 34px;
-      overflow: hidden;
-    }
-
-    .stage-5 .mouth::before,
-    .stage-5 .mouth::after {
-      display: none;
-    }
-
-    .stage-5 .mouth .tongue {
-      position: absolute;
-      left: 50%;
-      bottom: -1px;
-      width: 55%;
-      height: 46%;
-      transform: translateX(-50%);
-      background: linear-gradient(180deg, #ff7a9f 0%, #ff537a 100%);
-      border-radius: 24px 24px 12px 12px;
-    }
-
     .counter {
       min-height: 20px;
       margin-top: -2px;
@@ -474,52 +383,49 @@
       color: var(--text-dim);
     }
 
-    .result-wrap {
-      min-height: 84px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .result-card {
-      width: 100%;
-      max-width: 280px;
-      padding: 14px 16px;
-      border-radius: 20px;
-      background: rgba(255,255,255,0.06);
-      border: 1px solid rgba(255,255,255,0.08);
+    .center-result {
+      position: absolute;
+      inset: 50% auto auto 50%;
+      transform: translate(-50%, -50%) scale(0.88);
+      width: min(74vw, 240px);
+      padding: 16px 16px 14px;
+      border-radius: 22px;
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.10);
       box-shadow:
-        0 16px 30px rgba(0,0,0,0.22),
-        inset 0 1px 0 rgba(255,255,255,0.05);
+        0 20px 40px rgba(0,0,0,0.30),
+        inset 0 1px 0 rgba(255,255,255,0.06);
+      backdrop-filter: blur(16px);
       opacity: 0;
-      transform: translateY(10px) scale(0.96);
-      transition: 0.28s ease;
       pointer-events: none;
+      transition: opacity 0.28s ease, transform 0.28s ease;
+      z-index: 4;
     }
 
-    .result-card.show {
+    .center-result.show {
       opacity: 1;
-      transform: translateY(0) scale(1);
+      transform: translate(-50%, -50%) scale(1);
     }
 
-    .result-label {
+    .center-result-label {
       font-size: 13px;
-      color: rgba(255,255,255,0.66);
-      margin-bottom: 4px;
+      color: rgba(255,255,255,0.68);
+      margin-bottom: 8px;
     }
 
-    .result-number {
-      font-size: clamp(36px, 10vw, 48px);
+    .center-result-number {
+      font-size: clamp(42px, 12vw, 58px);
       font-weight: 800;
-      letter-spacing: -0.05em;
+      letter-spacing: -0.06em;
+      line-height: 1;
       color: #fff;
-      text-shadow: 0 0 20px rgba(255,255,255,0.18);
+      text-shadow: 0 0 24px rgba(255,255,255,0.18);
     }
 
-    .result-sub {
-      margin-top: 4px;
-      font-size: 13px;
-      color: rgba(255,255,255,0.58);
+    .center-result-sub {
+      margin-top: 8px;
+      font-size: 12px;
+      color: rgba(255,255,255,0.56);
     }
 
     .again-btn {
@@ -559,6 +465,7 @@
       transform: translate(0, 0) scale(1);
       animation: fly 980ms cubic-bezier(.15,.75,.25,1) forwards;
       box-shadow: 0 0 18px currentColor;
+      z-index: 5;
     }
 
     @keyframes fly {
@@ -587,6 +494,7 @@
       pointer-events: none;
       opacity: 0;
       animation: flash 420ms ease-out forwards;
+      z-index: 5;
     }
 
     @keyframes flash {
@@ -615,19 +523,6 @@
         padding: 7px 12px;
       }
 
-      .sub {
-        max-width: 300px;
-      }
-
-      .result-wrap {
-        min-height: 74px;
-      }
-
-      .result-card {
-        padding: 12px 14px;
-        max-width: 260px;
-      }
-
       .again-btn {
         min-width: 148px;
         padding: 13px 16px;
@@ -637,7 +532,6 @@
 
     @media (max-height: 760px) {
       .app {
-        max-height: calc(100vh - var(--safe-top) - var(--safe-bottom) - 16px);
         gap: 7px;
       }
 
@@ -648,23 +542,11 @@
       .sub {
         font-size: 14px;
       }
-
-      .badge {
-        margin-bottom: 0;
-      }
-
-      .result-wrap {
-        min-height: 66px;
-      }
-
-      .result-card {
-        padding: 12px 14px;
-      }
     }
 
     @media (max-height: 680px) {
       :root {
-        --face-size: 132px;
+        --face-size: 130px;
       }
 
       .arena {
@@ -682,13 +564,9 @@
 
       .counter,
       .hint,
-      .result-label,
-      .result-sub {
+      .center-result-label,
+      .center-result-sub {
         font-size: 12px;
-      }
-
-      .result-number {
-        font-size: 34px;
       }
     }
   </style>
@@ -700,34 +578,49 @@
     <div class="badge">Telegram Mini App Test</div>
     <h1>Злой смайлик</h1>
     <div class="sub">
-      Жми на смайлик. Он будет всё сильнее беситься, менять лицо, а потом взорвётся и выбросит случайное число.
+      Жми на смайлик. Он будет всё сильнее беситься, менять лицо, а потом взорвётся и прямо на его месте покажет случайный результат.
     </div>
 
     <div class="arena" id="arena">
       <div class="tap-zone">
         <button class="smiley-btn pulse stage-1" id="smileyBtn" aria-label="Злой смайлик">
           <div class="face-core"></div>
+
           <div class="brow left"></div>
           <div class="brow right"></div>
+
           <div class="eye left"></div>
           <div class="eye right"></div>
-          <div class="mouth" id="mouth">
-            <div class="tongue" id="tongue" style="display:none;"></div>
-          </div>
+
+          <svg class="mouth-svg" viewBox="0 0 100 60" aria-hidden="true">
+            <path
+              id="mouthPath"
+              class="mouth-path"
+              d="M20 28 Q50 48 80 28"
+              stroke="#5a1a00"
+              stroke-width="6"
+              fill="none"
+              stroke-linecap="round"
+            />
+            <path
+              id="tonguePath"
+              class="tongue-svg"
+              d="M35 36 Q50 54 65 36 L65 48 Q50 58 35 48 Z"
+              fill="#ff6f8f"
+            />
+          </svg>
         </button>
+
+        <div class="center-result" id="centerResult">
+          <div class="center-result-label">Твой случайный результат</div>
+          <div class="center-result-number" id="resultNumber">0</div>
+          <div class="center-result-sub">Число выпало после взрыва</div>
+        </div>
       </div>
     </div>
 
     <div class="counter" id="counter">Нажатий: 0</div>
     <div class="hint">На 10-м нажатии — взрыв и случайное число.</div>
-
-    <div class="result-wrap">
-      <div class="result-card" id="resultCard">
-        <div class="result-label">Твой случайный результат</div>
-        <div class="result-number" id="resultNumber">0</div>
-        <div class="result-sub">Число выпало после взрыва</div>
-      </div>
-    </div>
 
     <button class="again-btn" id="againBtn">Ещё раз</button>
   </div>
@@ -739,28 +632,17 @@
     }
 
     const smileyBtn = document.getElementById("smileyBtn");
-    const mouth = document.getElementById("mouth");
-    const tongue = document.getElementById("tongue");
+    const mouthPath = document.getElementById("mouthPath");
+    const tonguePath = document.getElementById("tonguePath");
     const againBtn = document.getElementById("againBtn");
     const counter = document.getElementById("counter");
     const arena = document.getElementById("arena");
-    const resultCard = document.getElementById("resultCard");
+    const centerResult = document.getElementById("centerResult");
     const resultNumber = document.getElementById("resultNumber");
 
     let clicks = 0;
     let exploded = false;
     let rollingTimer = null;
-
-    function setStage(stage) {
-      smileyBtn.classList.remove("stage-1", "stage-2", "stage-3", "stage-4", "stage-5");
-      smileyBtn.classList.add(`stage-${stage}`);
-
-      if (stage >= 5) {
-        tongue.style.display = "block";
-      } else {
-        tongue.style.display = "none";
-      }
-    }
 
     function getStageByClicks(value) {
       if (value <= 2) return 1;
@@ -768,6 +650,54 @@
       if (value <= 6) return 3;
       if (value <= 8) return 4;
       return 5;
+    }
+
+    function setStage(stage) {
+      smileyBtn.classList.remove("stage-1", "stage-2", "stage-3", "stage-4", "stage-5");
+      smileyBtn.classList.add(`stage-${stage}`);
+      updateMouth(stage);
+    }
+
+    function updateMouth(stage) {
+      if (stage === 1) {
+        mouthPath.setAttribute("d", "M20 28 Q50 48 80 28");
+        mouthPath.setAttribute("stroke", "#6a2500");
+        mouthPath.setAttribute("stroke-width", "6");
+        mouthPath.setAttribute("fill", "none");
+        tonguePath.style.opacity = "0";
+      }
+
+      if (stage === 2) {
+        mouthPath.setAttribute("d", "M24 34 Q50 40 76 34");
+        mouthPath.setAttribute("stroke", "#642100");
+        mouthPath.setAttribute("stroke-width", "5");
+        mouthPath.setAttribute("fill", "none");
+        tonguePath.style.opacity = "0";
+      }
+
+      if (stage === 3) {
+        mouthPath.setAttribute("d", "M24 40 Q50 30 76 40");
+        mouthPath.setAttribute("stroke", "#5f1b00");
+        mouthPath.setAttribute("stroke-width", "5");
+        mouthPath.setAttribute("fill", "none");
+        tonguePath.style.opacity = "0";
+      }
+
+      if (stage === 4) {
+        mouthPath.setAttribute("d", "M18 46 Q50 18 82 46");
+        mouthPath.setAttribute("stroke", "#5a1400");
+        mouthPath.setAttribute("stroke-width", "6");
+        mouthPath.setAttribute("fill", "none");
+        tonguePath.style.opacity = "0";
+      }
+
+      if (stage === 5) {
+        mouthPath.setAttribute("d", "M24 22 Q50 10 76 22 Q78 42 70 52 Q50 59 30 52 Q22 42 24 22 Z");
+        mouthPath.setAttribute("stroke", "#641000");
+        mouthPath.setAttribute("stroke-width", "4");
+        mouthPath.setAttribute("fill", "#4e0000");
+        tonguePath.style.opacity = "1";
+      }
     }
 
     function updateVisualState() {
@@ -852,8 +782,9 @@
     }
 
     function rollResult(finalValue) {
-      resultCard.classList.add("show");
-      let steps = 14;
+      centerResult.classList.add("show");
+
+      let steps = 16;
       clearInterval(rollingTimer);
 
       rollingTimer = setInterval(() => {
@@ -878,7 +809,10 @@
       vibrate("heavy");
 
       const randomValue = getRandomInt(1, 100);
-      rollResult(randomValue);
+
+      setTimeout(() => {
+        rollResult(randomValue);
+      }, 120);
 
       counter.textContent = "Бах. Смайлик не выдержал.";
       againBtn.classList.add("show");
@@ -914,12 +848,16 @@
       smileyBtn.style.transform = "scale(1)";
       smileyBtn.style.removeProperty("--scale");
 
-      tongue.style.display = "none";
-      counter.textContent = "Нажатий: 0";
+      centerResult.classList.remove("show");
       resultNumber.textContent = "0";
-      resultCard.classList.remove("show");
+
+      counter.textContent = "Нажатий: 0";
       againBtn.classList.remove("show");
+
+      updateMouth(1);
     });
+
+    updateMouth(1);
   </script>
 </body>
 </html>
